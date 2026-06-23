@@ -12,4 +12,4 @@ Bienvenido al repositorio central del proyecto integrador. Este monorepo contien
 Para facilitar la revisión y el proceso de acoplamiento de los sistemas, la documentación técnica se encuentra dividida en dos guías fundamentales dentro de la carpeta `docs/`:
 
 1.  **Diseño General e Historias de Usuario:** Accede al [PROYECTO_INTEGRADOR.md](./docs/PROYECTO_INTEGRADOR.md) para revisar el documento de requerimientos técnicos (TRD), la federación de bases de datos y el backlog ágil.
-2.  **Manual de Integración para el Sistema B (Gabriel):** Accede al [INTEGRATION_GUIDE.md](./docs/INTEGRATION_GUIDE.md) para obtener el contrato de API, la configuración del Gateway y el bloque de código del Middleware asíncrono de KMS listo para implementar en .NET 9.
+2.  **Manual de Integración para el Sistema B:** Accede al [INTEGRATION_GUIDE.md](./docs/INTEGRATION_GUIDE.md) para obtener el contrato de API, la configuración del Gateway y el bloque de código del Middleware asíncrono de KMS listo para implementar en .NET 9.
