@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  postgres-keycloak:
+    image: postgres:16-alpine
+    container_name: postgres_cloak
+    environment:
+      POSTGRES_DB: keycloak_db
+      POSTGRES_USER: keycloak_user
+      POSTGRES_PASSWORD: KeycloakSecurePassword2026
+    volumes:
+      - postgres_keycloak_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - seguridad_network
+
+  localstack:
+    container_name: localstack_aws
+    image: localstack/localstack:3.0.0
+    ports:
+      - "4566:4566"        
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - "localstack_data:/var/lib/localstack"
+    networks:
+      - seguridad_network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: keycloak_server
+    command: start-dev --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres-keycloak:5432/keycloak_db
+      KC_DB_USERNAME: keycloak_user
+      KC_DB_PASSWORD: KeycloakSecurePassword2026
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: AdminSecurePassword2026
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+    volumes:
+      - ./keycloak-data:/opt/keycloak/data/import
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-keycloak
+    networks:
+      - seguridad_network
+
+volumes:
+  postgres_keycloak_data:
+  localstack_data:
+
+networks:
+  seguridad_network:
+    driver: bridge

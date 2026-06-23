@@ -1,0 +1,42 @@
+# ==========================================
+# Dependencias de Node.js y Entornos
+# ==========================================
+**/node_modules/
+**/.env
+**/.env.local
+**/.env.*.local
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# ==========================================
+# Compilación y Caché de Frontend (Vite)
+# ==========================================
+**/dist/
+**/.vite/
+**/.cache/
+
+# ==========================================
+# Persistencia de Datos Local (Bases de Datos)
+# ==========================================
+**/*.sqlite
+**/*.sqlite-journal
+**/*.sqlite3
+
+# ==========================================
+# Infraestructura y Volúmenes Locales (Docker)
+# ==========================================
+# Ignorar datos locales generados por LocalStack y Keycloak en el host
+**/keycloak-data/
+**/localstack_data/
+**/.docker/
+
+# ==========================================
+# Configuración de Sistemas Operativos e IDEs
+# ==========================================
+.DS_Store
+Thumbs.db
+**/.vscode/
+**/.idea/
+**/.project
+**/.settings/
