@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build: ./services/api-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./services/api-gateway:/app
+      - /app/node_modules
+    environment:
+      - PORT=3000
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - CATALOG_SERVICE_URL=http://catalog-service:3002
+      - ORDERS_SERVICE_URL=http://order-service:3003
+    networks:
+      - cathering-network
+      - seguridad_network
+
+  auth-service:
+    build: ./services/auth-service
+    volumes:
+      - ./services/auth-service:/app
+      - /app/node_modules
+    environment:
+      - PORT=3001
+      - JWKS_URI=http://keycloak:8080/realms/proyecto-seguro/protocol/openid-connect/certs
+      - JWT_ISSUER=http://localhost:8080/realms/proyecto-seguro
+      - JWT_AUDIENCE=cathering-backend
+    networks:
+      - cathering-network
+      - seguridad_network
+
+  catalog-service:
+    build: ./services/catalog-service
+    command: node index.js
+    volumes:
+      - ./services/catalog-service:/app
+      - /app/node_modules
+    environment:
+      - PORT=3002
+      - JWKS_URI=http://keycloak:8080/realms/proyecto-seguro/protocol/openid-connect/certs
+      - JWT_ISSUER=http://localhost:8080/realms/proyecto-seguro
+      - JWT_AUDIENCE=cathering-backend
+    networks:
+      - cathering-network
+      - seguridad_network
+
+  order-service:
+    build: ./services/order-service
+    command: node index.js
+    volumes:
+      - ./services/order-service:/app
+      - /app/node_modules
+    environment:
+      - PORT=3003
+      - JWKS_URI=http://keycloak:8080/realms/proyecto-seguro/protocol/openid-connect/certs
+      - JWT_ISSUER=http://localhost:8080/realms/proyecto-seguro
+      - JWT_AUDIENCE=cathering-backend
+    networks:
+      - cathering-network
+      - seguridad_network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:3000/api
+    depends_on:
+      - api-gateway
+    networks:
+      - cathering-network
+
+networks:
+  cathering-network:
+    driver: bridge
+  seguridad_network:
+    external: true
+    name: proyecto_integrador_seguridad_network

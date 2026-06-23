@@ -1,0 +1,14 @@
+# Ignorar dependencias
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Ignorar archivos de entorno y logs
+.env
+npm-debug.log
+backend/data/auth.sqlite
+backend/uploads/
+
+# Ignorar carpetas de build
+dist/
+build/

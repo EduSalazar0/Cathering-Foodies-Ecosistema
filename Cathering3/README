@@ -1,0 +1,95 @@
+🍽️ CateringCRUD: Gestión de Usuarios para App de Comida Estudiantil
+🚀 Acerca del Proyecto
+CateringCRUD es una aplicación web full-stack diseñada para la administración de usuarios (Create, Read, Update, Delete) de una plataforma de pedidos de comida dirigida a estudiantes. El proyecto simula el panel de administración central donde el personal autorizado puede gestionar las cuentas de usuario de manera segura y eficiente.
+
+Este proyecto se desarrolló para demostrar:
+
+Autenticación segura (Login/Logout) usando JWT (JSON Web Tokens).
+
+Implementación de Rutas Protegidas con React Router v6.
+
+Desarrollo de un CRUD completo en el frontend.
+
+Un diseño acogedor y usable con una paleta de colores inspirada en una cafetería (cafés, amarillos y beige).
+
+🎨 Diseño y Paleta de Colores
+El diseño busca ser amigable y cálido, ideal para un servicio enfocado en la comunidad estudiantil.
+
+Nombre	Código Hex	Uso Principal
+Amarillo Primario	#FFCC33	Resaltados, Botones de Éxito, Hovers.
+Marrón Café	#8B4513	Navbar, Encabezados de Tabla, Fondo de Botones Principales.
+Blanco Crema	#FAF8F5	Fondo principal de la aplicación.
+Blanco Puro	#FFFFFF	Superficie de Tarjetas y Formularios.
+
+Exportar a Hojas de cálculo
+🛠️ Tecnologías Utilizadas
+Este proyecto utiliza una arquitectura de dos partes (Frontend/Backend).
+
+Frontend
+React: Biblioteca principal para la interfaz de usuario.
+
+Vite: Herramienta de construcción rápida y ligera.
+
+React Router v6: Gestión de rutas y navegación, incluyendo rutas anidadas y protegidas.
+
+CSS Puro: Estilos modulares y variables CSS para el diseño.
+
+Custom Hooks (useAuth): Manejo centralizado del estado de autenticación.
+
+Backend (Asumido)
+(Actualiza esta sección con tu tecnología de backend real, por ejemplo, Node.js, Python, etc.)
+
+Node.js / Express: Servidor API REST.
+
+JWT: Para autenticación.
+
+Base de datos: PostgreSQL / MongoDB.
+
+⚙️ Instalación
+Sigue estos pasos para levantar el proyecto localmente.
+
+1. Clonar el Repositorio
+Bash
+
+git clone
+cd CateringCRUD
+2. Configurar el Backend (Asumido)
+(Añade aquí los pasos para tu backend si aplica, ej.:)
+
+Bash
+
+# Navegar al directorio del backend
+cd backend
+npm install
+# Configurar variables de entorno (.env)
+npm start 
+3. Configurar el Frontend
+Bash
+
+# Navegar al directorio del frontend
+cd frontend
+npm install
+npm run dev
+El frontend se ejecutará en http://localhost:5173 (o el puerto que te asigne Vite).
+
+📖 Uso
+Flujo de la Aplicación
+Inicio: Al cargar la aplicación, el usuario puede ver la página de bienvenida. Los enlaces a Dashboard y Manage Users estarán ocultos.
+
+Registro / Login: El usuario debe usar los formularios de Login o Register para obtener un token de autenticación.
+
+Rutas Protegidas: Una vez autenticado, el token se guarda y el usuario puede acceder a:
+
+/dashboard
+
+/manage-users (Donde reside la funcionalidad CRUD).
+
+CRUD de Usuarios: En la página de Manage Users, los usuarios autorizados pueden:
+
+Crear nuevos usuarios (Formulario de Creación).
+
+Ver el listado completo (Tabla).
+
+Editar usuarios existentes (Formulario en línea).
+
+Eliminar usuarios.
