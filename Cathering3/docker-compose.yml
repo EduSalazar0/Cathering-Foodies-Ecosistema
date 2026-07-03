@@ -27,7 +27,7 @@ services:
       - JWKS_URI=http://keycloak:8080/realms/proyecto-seguro/protocol/openid-connect/certs
       - JWT_ISSUER=http://localhost:8080/realms/proyecto-seguro
       - JWT_AUDIENCE=cathering-backend
-      - FOODIES_INTEGRATION_URL=http://host.docker.internal:5000/integration/cathering
+      - FOODIES_INTEGRATION_URL=http://host.docker.internal:5004/api/integration/cathering
     networks:
       - cathering-network
       - seguridad_network
@@ -43,6 +43,7 @@ services:
       - JWKS_URI=http://keycloak:8080/realms/proyecto-seguro/protocol/openid-connect/certs
       - JWT_ISSUER=http://localhost:8080/realms/proyecto-seguro
       - JWT_AUDIENCE=cathering-backend
+      - FOODIES_INTEGRATION_URL=http://host.docker.internal:5004/api/integration/cathering
     networks:
       - cathering-network
       - seguridad_network

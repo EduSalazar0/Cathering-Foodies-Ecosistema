@@ -28,6 +28,7 @@ public class IntegrationController : ControllerBase
 
         var json = await DecryptPayloadAsync(request.EncryptedPayload);
         using var document = JsonDocument.Parse(json);
+        var payload = document.RootElement.Clone();
 
         return Ok(new
         {
@@ -35,9 +36,9 @@ public class IntegrationController : ControllerBase
             receivedAt = DateTimeOffset.UtcNow,
             source = request.IntegrationHeader?.SourceSystem,
             target = request.IntegrationHeader?.TargetSystem,
-            subject = document.RootElement.TryGetProperty("sub", out var sub) ? sub.GetString() : null,
-            actionType = document.RootElement.TryGetProperty("actionType", out var action) ? action.GetString() : null,
-            payload = document.RootElement
+            subject = payload.TryGetProperty("sub", out var sub) ? sub.GetString() : null,
+            actionType = payload.TryGetProperty("actionType", out var action) ? action.GetString() : null,
+            payload
         });
     }
 
