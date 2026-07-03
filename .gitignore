@@ -9,6 +9,7 @@
 **/yarn-debug.log*
 **/yarn-error.log*
 .logs-*.txt
+.runtime-logs/
 
 # ==========================================
 # Compilación y Caché de Frontend (Vite)
