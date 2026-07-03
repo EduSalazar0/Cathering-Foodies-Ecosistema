@@ -1,0 +1,18 @@
+<div>
+  <ng-container [formGroup]="group!">
+    <div class="flex items-center gap-2">
+      <p-toggleswitch
+        [name]="formControlName"
+        [formControlName]="formControlName"
+        [invalid]="isInvalid()"
+      >
+      </p-toggleswitch>
+      <label [for]="formControlName" class="cursor-pointer">{{ label }}</label>
+    </div>
+  </ng-container>
+
+  <app-field-errors
+    [customErrorMessage]="customErrorMessage"
+    [errors]="control?.errors"
+  ></app-field-errors>
+</div>

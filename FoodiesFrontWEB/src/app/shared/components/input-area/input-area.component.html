@@ -1,0 +1,19 @@
+<div>
+  <ng-container [formGroup]="group!">
+    <p-floatlabel>
+      <textarea 
+      pTextarea 
+      [rows]="rows" 
+      [cols]="cols" 
+      [id]="formControlName"
+      [formControlName]="formControlName"
+      [invalid]="isInvalid('value')"
+      [maxlength]="maxLength"
+      class="w-full">
+      </textarea>
+      <label [for]="formControlName">{{ label }}</label>
+    </p-floatlabel>
+  </ng-container>
+  <app-field-errors [customErrorMessage]="customErrorMessage" [errors]="control?.errors"></app-field-errors>
+</div>
+

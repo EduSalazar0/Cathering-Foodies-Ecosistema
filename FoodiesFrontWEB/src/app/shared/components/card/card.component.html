@@ -1,0 +1,17 @@
+<p-card>
+        <ng-template pTemplate="title">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl font-bold">{{title}}</span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="subtitle">
+            <p class="text-gray-600">{{description}}</p>
+        </ng-template>
+        <ng-template pTemplate="content">
+        <ng-content></ng-content>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <ng-content select="[card-footer]"></ng-content>
+    </ng-template>
+</p-card>

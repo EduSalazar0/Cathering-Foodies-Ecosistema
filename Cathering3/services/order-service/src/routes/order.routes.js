@@ -13,6 +13,7 @@ module.exports = (OrderModel, OrderItemModel, WalletModel, TransactionModel) => 
     router.use(AuthMiddleware);
 
     router.post('/', controller.createOrder.bind(controller));
+    router.post('/sync-foodies', controller.syncWithFoodies.bind(controller));
     router.get('/my-orders', controller.getMyOrders.bind(controller));
     router.get('/incoming', controller.getIncomingOrders.bind(controller));
     router.put('/:id/status', controller.updateStatus.bind(controller));

@@ -1,0 +1,225 @@
+<ng-container [formGroup]="parentForm">
+  <!-- Header mejorado con TailwindCSS -->
+  <div class="flex items-center justify-between mb-4 gap-4">
+    <div class="flex items-center gap-2">
+      <h3
+        *ngIf="label"
+        class="text-lg font-semibold text-gray-800 flex items-center gap-2"
+      >
+        <i *ngIf="icon" [class]="icon"></i>
+        {{ label }}
+      </h3>
+    </div>
+    <p-button
+      *ngIf="edit && parentForm.enabled"
+      label="Nuevo"
+      icon="pi pi-plus"
+      severity="help"
+      size="small"
+      [loading]="loading"
+      [ariaLabel]="getAriaLabel('add')"
+      styleClass="min-w-28"
+      (onClick)="agregarItemClick()"
+    >
+    </p-button>
+  </div>
+
+  <!-- Tabla principal con PrimeNG 20 y TailwindCSS -->
+  <div
+    class="w-full overflow-hidden"
+    [class.opacity-60]="loading"
+    [class.pointer-events-none]="loading"
+  >
+    <p-table
+      [value]="formArray.controls"
+      [loading]="loading"
+      styleClass="p-datatable-gridlines p-datatable-striped"
+      [emptyMessage]="emptyMessage"
+      [trackByFn]="trackByIndex"
+      [responsive]="true"
+    >
+      <!-- Header personalizado -->
+      <ng-template *ngIf="header" pTemplate="header">
+        <tr>
+          <ng-container *ngTemplateOutlet="header"></ng-container>
+        </tr>
+      </ng-template>
+
+      <!-- Header por defecto -->
+      <ng-template *ngIf="!header" pTemplate="header">
+        <tr>
+          <th
+            *ngFor="let col of columnas; trackBy: trackByColumn"
+            [style]="col.style"
+            class="bg-gray-50 border-b-2 border-gray-200"
+          >
+            {{ col.header }}
+          </th>
+          <th
+            *ngIf="delete && parentForm.enabled"
+            class="w-12 text-center bg-gray-50 border-b-2 border-gray-200"
+          >
+            Acciones
+          </th>
+        </tr>
+      </ng-template>
+
+      <!-- Body personalizado -->
+      <ng-template
+        *ngIf="body"
+        pTemplate="body"
+        let-rowData
+        let-rowIndex="rowIndex"
+      >
+        <ng-container [formArrayName]="controlName">
+          <tr
+            [formGroupName]="rowIndex"
+            class="hover:bg-gray-50 transition-colors duration-200"
+          >
+            <ng-container
+              *ngTemplateOutlet="
+                body;
+                context: { rowData: rowData, rowIndex: rowIndex }
+              "
+            ></ng-container>
+            <td *ngIf="delete && parentForm.enabled" class="w-12 text-center">
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                text="true"
+                [rounded]="true"
+                size="small"
+                [ariaLabel]="getAriaLabel('delete', rowIndex)"
+                pTooltip="Eliminar"
+                tooltipPosition="top"
+                styleClass="!w-8 !h-8"
+                (onClick)="eliminarItemClick(rowIndex)"
+              >
+              </p-button>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-template>
+
+      <!-- Body por defecto -->
+      <ng-template
+        *ngIf="!body"
+        pTemplate="body"
+        let-rowData
+        let-rowIndex="rowIndex"
+      >
+        <ng-container [formArrayName]="controlName">
+          <tr
+            [formGroupName]="rowIndex"
+            class="hover:bg-gray-50 transition-colors duration-200"
+          >
+            <td
+              *ngFor="let col of columnas; trackBy: trackByColumn"
+              [ngSwitch]="col.type"
+              [style]="col.style"
+              class="min-h-10 align-middle"
+            >
+              <span
+                class="p-column-title font-semibold text-gray-700 mb-1 block md:hidden"
+                >{{ col.header }}</span
+              >
+              <div class="flex items-center min-h-10 w-full">
+                <ng-container *ngSwitchCase="'text'">
+                  <ng-container
+                    *ngTemplateOutlet="
+                      text;
+                      context: { form: rowData, data: col }
+                    "
+                  ></ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'dropdown'">
+                  <ng-container
+                    *ngTemplateOutlet="
+                      dropdown;
+                      context: { form: rowData, data: col }
+                    "
+                  ></ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'checkbox'">
+                  <ng-container
+                    *ngTemplateOutlet="
+                      checkbox;
+                      context: { form: rowData, data: col }
+                    "
+                  ></ng-container>
+                </ng-container>
+              </div>
+            </td>
+            <td *ngIf="delete && parentForm.enabled" class="w-12 text-center">
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                text="true"
+                [rounded]="true"
+                size="small"
+                [ariaLabel]="getAriaLabel('delete', rowIndex)"
+                pTooltip="Eliminar"
+                tooltipPosition="top"
+                styleClass="!w-8 !h-8"
+                (onClick)="eliminarItemClick(rowIndex)"
+              >
+              </p-button>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-template>
+    </p-table>
+    <app-field-errors [formField]="formArray"></app-field-errors>
+  </div>
+</ng-container>
+
+<!-- Templates simplificados para los tipos de campo -->
+<ng-template #text let-rowData="form" let-col="data">
+  <ng-container [formGroup]="rowData">
+    <div class="w-full">
+      <!-- Placeholder para app-input-area que el usuario debe implementar -->
+      <input
+        *ngIf="col.pKeyFilter"
+        [formControlName]="col.fromControlName"
+        class="w-full text-sm p-2 border border-gray-300 rounded"
+        [maxlength]="getMax(rowData, col)"
+        placeholder="Ingrese valor..."
+      />
+      <app-input
+        *ngIf="!col.pKeyFilter"
+        [formControlName]="col.fromControlName"
+        [maxlength]="getMax(rowData, col)"
+      ></app-input>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #dropdown let-rowData="form" let-col="data">
+  <ng-container [formGroup]="rowData">
+    <div class="w-full">
+      <!-- Placeholder para app-dropdown que el usuario debe implementar -->
+      <select
+        [formControlName]="col.fromControlName"
+        class="w-full text-sm p-2 border border-gray-300 rounded"
+      >
+        <option value="">Seleccione...</option>
+        <option *ngFor="let option of col.values" [value]="option">
+          {{ col.optionLabel ? option[col.optionLabel] : option }}
+        </option>
+      </select>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #checkbox let-rowData="form" let-col="data">
+  <ng-container [formGroup]="rowData">
+    <div class="flex justify-center w-full">
+      <!-- Placeholder para app-input-checkbox que el usuario debe implementar -->
+      <input
+        type="checkbox"
+        [formControlName]="col.fromControlName"
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+      />
+    </div>
+  </ng-container>
+</ng-template>

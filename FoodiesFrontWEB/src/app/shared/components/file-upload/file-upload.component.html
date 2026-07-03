@@ -1,0 +1,21 @@
+<div class="p-field" [ngClass]="[class, {'ng-invalid ng-dirty': formField.invalid && (formField.dirty || formField.touched)}]">
+    <p-fileUpload
+        #form
+        mode="basic"
+        [accept]="format"
+        [maxFileSize]="1000000"
+        [chooseLabel]="label"
+        [chooseIcon]="'pi-file'"
+        (uploadHandler)="uploadSelected($event, form)"
+        [auto]="true"
+        [customUpload]="true"
+        [multiple]="multiple"
+        [disabled]="isDisabled">
+    </p-fileUpload>
+
+    <div *ngIf="nombreArchivos" class="file-names">
+        <em class="pi pi-upload">{{ nombreArchivos }}</em>
+    </div>
+
+    <app-field-errors *ngIf="!value" [errors]="formField.errors"></app-field-errors>
+</div>

@@ -1,12 +1,13 @@
 
 import React from 'react';
 
-import { Navigate, Outlet } from 'react-router-dom'; 
+import { Navigate, Outlet, useLocation } from 'react-router-dom'; 
 import { useAuth } from '../../hooks/useAuth';
 
 const ProtectedRoute = () => {
 
     const { isAuthenticated, loading } = useAuth(); 
+    const location = useLocation();
     
 
     if (loading) {
@@ -15,7 +16,9 @@ const ProtectedRoute = () => {
 
 
     if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
+        const returnTo = `${location.pathname}${location.search}`;
+        sessionStorage.setItem('cathering_post_login_return_url', returnTo);
+        return <Navigate to="/login" replace state={{ returnTo }} />;
     }
 
 

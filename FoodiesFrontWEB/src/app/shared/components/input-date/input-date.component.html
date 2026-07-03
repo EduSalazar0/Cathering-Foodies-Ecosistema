@@ -1,0 +1,16 @@
+<div>
+  <ng-container [formGroup]="group!">
+    <p-floatlabel>
+        <p-datepicker 
+        [formControlName]="formControlName" 
+        [showIcon]="true"
+        [invalid]="isInvalid('selectedDate')"
+        [minDate]="minDate" 
+        [maxDate]="maxDate" 
+        appendTo = "body"
+        class = "w-full"/>
+      <label [for]="formControlName">{{ label }}</label>
+    </p-floatlabel>
+  </ng-container>
+  <app-field-errors [customErrorMessage]="customErrorMessage" [errors]="control?.errors"></app-field-errors>
+</div>

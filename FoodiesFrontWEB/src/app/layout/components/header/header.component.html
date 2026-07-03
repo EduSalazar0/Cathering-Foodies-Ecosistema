@@ -1,0 +1,46 @@
+<header class="global-header">
+  <!-- Botón de menú móvil -->
+  <button class="menu-toggle-btn" 
+          (click)="onMenuClick()" 
+          *ngIf="showMenuButton"
+          type="button"
+          [attr.aria-label]="'Abrir menú'">
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </button>
+
+  <!-- Logo y título -->
+  <div class="header-brand">
+    <div class="brand-logo">
+      <img src="/img/Logo Transparente.png" alt="FoodiesBNB Logo" class="logo-image">
+    </div>
+  </div>
+
+  <!-- Acciones del header -->
+  <div class="header-actions">
+    <!-- Notificaciones -->
+    <button class="action-btn notifications" 
+            type="button"
+            [attr.aria-label]="'Ver notificaciones'">
+      <i class="pi pi-bell"></i>
+      <span class="notification-badge">3</span>
+    </button>
+
+    <!-- Perfil del usuario -->
+    <div class="user-menu">
+      <button class="user-profile-btn" 
+              type="button"
+              [attr.aria-label]="'Menú de usuario'">
+        <div class="user-avatar">
+          <i class="pi pi-user"></i>
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ getUserDisplayName() }}</span>
+        </div>
+      </button>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,42 @@
+### GET all formularios
+GET http://localhost:5003/api/FormularioFoodie
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### GET formulario by ID
+GET http://localhost:5003/api/FormularioFoodie/1
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### POST create new formulario
+POST http://localhost:5003/api/FormularioFoodie
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "nombreCompleto": "Juan Pérez",
+  "email": "juan.perez@example.com",
+  "seguidoresInstagram": "5000",
+  "seguidoresTiktok": "3000",
+  "tipoComida": "Italiana",
+  "ubicacion": "Madrid, España",
+  "experienciaPrevia": "2 años como food blogger",
+  "motivacion": "Me apasiona la gastronomía y quiero compartir mi experiencia con otros foodies"
+}
+
+### PUT update formulario
+PUT http://localhost:5003/api/FormularioFoodie/1
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "nombreCompleto": "Juan Pérez García",
+  "email": "juan.perez@example.com",
+  "seguidoresInstagram": "6000",
+  "seguidoresTiktok": "4000",
+  "tipoComida": "Italiana y Española",
+  "ubicacion": "Madrid, España",
+  "experienciaPrevia": "3 años como food blogger",
+  "motivacion": "Me apasiona la gastronomía y quiero compartir mi experiencia con otros foodies. He ganado más experiencia y seguidores."
+}
+
+### Health check
+GET http://localhost:5003/health

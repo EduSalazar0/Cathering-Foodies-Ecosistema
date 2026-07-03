@@ -1,0 +1,96 @@
+<div>
+  <app-toolbar class="mt-4">
+    <h1 start class="text-2xl font-semibold text-gray-800">
+      Gestión de Parámetros
+    </h1>
+    <app-button
+      end
+      label="Nuevo Parámetro"
+      icon="pi pi-plus"
+      type="button"
+      (buttonClick)="openNew()"
+    >
+    </app-button>
+  </app-toolbar>
+
+  <app-data-table
+    [data]="parametros"
+    [columns]="columns"
+    title="Listado de Parámetros"
+    [globalFilterFields]="['codigo', 'descripcion']"
+  >
+    <ng-template appTemplate="body-valor" let-parametro>
+      {{ getDisplayValue(parametro) }}
+    </ng-template>
+
+    <ng-template appTemplate="body-estaActivo" let-parametro>
+      <app-tag
+        [label]="parametro.estaActivo ? 'Activo' : 'Inactivo'"
+        [severity]="parametro.estaActivo ? 'success' : 'danger'"
+      ></app-tag>
+    </ng-template>
+
+    <ng-template appTemplate="actions" let-parametro>
+      <app-button
+        pButton
+        pRipple
+        icon="pi pi-pencil"
+        severity="info"
+        (click)="editParameter(parametro)"
+      ></app-button>
+    </ng-template>
+  </app-data-table>
+</div>
+
+<app-dialog
+  *ngIf="displayDialog"
+  [(visible)]="displayDialog"
+  [style]="{ width: '450px' }"
+  [header]="isEditMode ? 'Editar Parámetro' : 'Nuevo Parámetro'"
+  [modal]="true"
+  [isSaving]="isSaving"
+  (cancelForm)="salir()"
+  (saveForm)="onSubmit()"
+>
+  <app-form [formGroup]="form" *ngIf="form">
+    <app-input formControlName="codigo" label="Código" />
+    <app-input formControlName="descripcion" label="Descripción" />
+    <app-select
+      formControlName="tipoValor"
+      label="Tipo de Valor"
+      [options]="valueTypes"
+    />
+    <div [ngSwitch]="form.value?.tipoValor">
+      <app-input
+        *ngSwitchCase="'valorTexto'"
+        formControlName="valorTexto"
+        label="Valor (Texto)"
+      />
+      <app-input-number
+        *ngSwitchCase="'valorEntero'"
+        formControlName="valorEntero"
+        label="Valor (Entero)"
+        type="integer"
+      />
+      <app-input-number
+        *ngSwitchCase="'valorDecimal'"
+        formControlName="valorDecimal"
+        label="Valor (Decimal)"
+        type="decimal"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="5"
+      />
+      <app-input-date
+        *ngSwitchCase="'valorFecha'"
+        formControlName="valorFecha"
+        label="Valor (Fecha)"
+      />
+      <app-input-switch
+        *ngSwitchCase="'valorBoolean'"
+        formControlName="valorBoolean"
+        label="Valor (Sí/No)"
+      />
+    </div>
+    <app-input-switch formControlName="estaActivo" label="Activo" />
+  </app-form>
+</app-dialog>

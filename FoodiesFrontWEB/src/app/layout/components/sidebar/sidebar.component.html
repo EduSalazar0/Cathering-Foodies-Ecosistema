@@ -1,0 +1,52 @@
+<!-- Overlay para móviles -->
+<div class="sidebar-overlay" 
+     [class.show]="isOpen" 
+     (click)="onToggle()"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar" [class.open]="isOpen">
+  
+  <!-- Usuario Info -->
+  <div class="user-profile">
+    <div class="user-avatar">
+      <div class="avatar-circle">
+        <i class="pi pi-user"></i>
+      </div>
+      <div class="status-indicator"></div>
+    </div>
+    <div class="user-details">
+      <h4 class="user-name">{{ userInfo.name }}</h4>
+      <p class="user-role" *ngIf="userInfo.email">{{ userInfo.email }}</p>
+    </div>
+  </div>
+
+  <!-- Navegación Principal -->
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <h5 class="section-title">MENÚ PRINCIPAL</h5>
+      <ul class="nav-list">
+        <li *ngFor="let item of menuItems" class="nav-item">
+          <a class="nav-link" 
+             [class.active]="item.active"
+             (click)="onItemClick(item)">
+            <div class="nav-icon">
+              <i [class]="'pi ' + item.icon"></i>
+            </div>
+            <span class="nav-text">{{ item.label }}</span>
+            <div class="nav-indicator" *ngIf="item.active"></div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Footer del Sidebar -->
+  <div class="sidebar-footer">
+    <button class="logout-btn" (click)="onLogout()" type="button">
+      <div class="logout-icon">
+        <i class="pi pi-sign-out"></i>
+      </div>
+      <span class="logout-text">Cerrar Sesión</span>
+    </button>
+  </div>
+</aside>

@@ -1,0 +1,134 @@
+services:
+  # 1. UsersApi
+  - type: web
+    name: foodies-users-api
+    env: docker
+    plan: free
+    dockerfilePath: ./UsersApi/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:$PORT
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__ConnectionDataBase
+        value: Host=dpg-d5rdfuh4tr6s73e0pn7g-a.oregon-postgres.render.com;Port=5432;Database=usersdb;Username=foodies_db_7bwi_user;Password=D0xlbFCfU2mIJrYcg4rIQXznA0G3RUkR;SslMode=Require
+      - key: Jwt__SecretKey
+        value: mi-clave-secreta-super-segura-de-32-caracteres-minimo-para-jwt-tokens-2024
+      - key: Jwt__Issuer
+        sync: false
+      - key: Jwt__Audience
+        value: foodies-api
+      - key: Jwt__Authority
+        sync: false
+      - key: Jwt__ExpirationMinutes
+        value: 60
+  - type: web
+    name: foodies-formulario-api
+    env: docker
+    plan: free
+    dockerfilePath: ./FormularioFoodieApi/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:$PORT
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__ConnectionDataBase
+        value: Host=dpg-d5rdfuh4tr6s73e0pn7g-a.oregon-postgres.render.com;Port=5432;Database=formulariofoodiedb;Username=foodies_db_7bwi_user;Password=D0xlbFCfU2mIJrYcg4rIQXznA0G3RUkR;SslMode=Require
+      - key: Jwt__SecretKey
+        value: mi-clave-secreta-super-segura-de-32-caracteres-minimo-para-jwt-tokens-2024
+      - key: Jwt__Issuer
+        value: https://foodies-users-api.onrender.com
+      - key: Jwt__Audience
+        value: foodies-api
+      - key: Jwt__Authority
+        sync: false
+      - key: Jwt__ExpirationMinutes
+        value: 60
+      - key: ApiSettings__UsersApiBaseUrl
+        value: https://foodies-users-api.onrender.com
+
+  # 3. ReservasApi
+  - type: web
+    name: foodies-reservas-api
+    env: docker
+    plan: free
+    dockerfilePath: ./ReservasApi/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:$PORT
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__ConnectionDataBase
+        value: Host=dpg-d5rdfuh4tr6s73e0pn7g-a.oregon-postgres.render.com;Port=5432;Database=reservasdb;Username=foodies_db_7bwi_user;Password=D0xlbFCfU2mIJrYcg4rIQXznA0G3RUkR;SslMode=Require
+      - key: Jwt__SecretKey
+        value: mi-clave-secreta-super-segura-de-32-caracteres-minimo-para-jwt-tokens-2024
+      - key: Jwt__Issuer
+        value: https://foodies-users-api.onrender.com
+      - key: Jwt__Audience
+        value: foodies-api
+      - key: Jwt__Authority
+        sync: false
+      - key: Jwt__ExpirationMinutes
+        value: 60
+      - key: Services__UserApi
+        value: https://foodies-users-api.onrender.com
+
+  # 4. AdminCoreApi
+  - type: web
+    name: foodies-admincore-api
+    env: docker
+    plan: free
+    dockerfilePath: ./AdminCoreApi/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:$PORT
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: Jwt__SecretKey
+        value: mi-clave-secreta-super-segura-de-32-caracteres-minimo-para-jwt-tokens-2024
+      - key: Jwt__Issuer
+        value: https://foodies-users-api.onrender.com
+      - key: Jwt__Audience
+        value: foodies-api
+      - key: ApiUrls__UsersApi
+        value: https://foodies-users-api.onrender.com
+      - key: ApiUrls__ReservasApi
+        value: https://foodies-reservas-api.onrender.com
+      - key: ApiUrls__FormularioFoodieApi
+        value: https://foodies-formulario-api.onrender.com
+
+  # 5. Gateway
+  - type: web
+    name: foodies-gateway
+    env: docker
+    plan: free
+    dockerfilePath: ./GatewayApi/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:$PORT
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: Jwt__SecretKey
+        value: mi-clave-secreta-super-segura-de-32-caracteres-minimo-para-jwt-tokens-2024
+      - key: Jwt__Issuer
+        value: https://foodies-users-api.onrender.com
+      - key: Jwt__Audience
+        value: foodies-api
+      - key: ReverseProxy__Clusters__users-cluster__Destinations__destination1__Address
+        value: https://foodies-users-api.onrender.com
+      - key: ReverseProxy__Clusters__formulario-foodie-cluster__Destinations__destination1__Address
+        value: https://foodies-formulario-api.onrender.com
+      - key: ReverseProxy__Clusters__reservas-cluster__Destinations__destination1__Address
+        value: https://foodies-reservas-api.onrender.com
+      - key: ReverseProxy__Clusters__admincore-cluster__Destinations__destination1__Address
+        value: https://foodies-admincore-api.onrender.com
+      - key: FRONTEND_ORIGIN
+        value: https://tu-frontend.onrender.com  # Actualizarás después
+
+databases: []
+# No se crearán nuevas databases, usaremos las que ya existen manualmente

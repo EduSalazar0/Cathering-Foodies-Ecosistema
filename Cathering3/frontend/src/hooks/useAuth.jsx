@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useCallback, useContext, useMemo } from 'react';
 import { useAuth as useOidcAuth } from 'react-oidc-context';
 
 import UserService from '../services/UserService';
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     const user = useMemo(() => {
         if (!oidc.user || !token) return null;
 
-        let realmRoles = [];
+        let platformRoles = [];
         try {
             // Decodificar manualmente la carga útil del JWT (Access Token)
             const base64Url = token.split('.')[1];
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
             }).join(''));
 
             const decodedToken = JSON.parse(jsonPayload);
-            realmRoles = decodedToken.realm_access?.roles || [];
+            platformRoles = extractCatheringRoles(decodedToken);
         } catch (e) {
             console.error("Error decodificando access_token", e);
         }
@@ -37,11 +37,11 @@ export const AuthProvider = ({ children }) => {
         const profile = oidc.user.profile;
 
         let role = 'estudiante'; // default
-        if (realmRoles.includes('admin')) {
+        if (platformRoles.includes('admin')) {
             role = 'admin';
-        } else if (realmRoles.includes('cafeteria')) {
+        } else if (platformRoles.includes('cafeteria')) {
             role = 'cafeteria';
-        } else if (realmRoles.includes('personal_academico')) {
+        } else if (platformRoles.includes('personal_academico')) {
             role = 'personal_academico';
         }
 
@@ -67,24 +67,49 @@ export const AuthProvider = ({ children }) => {
     const orderService = useMemo(() => token ? OrderService : null, [token]);
     const walletService = useMemo(() => token ? WalletService : null, [token]);
 
+    const login = useCallback((returnTo) => {
+        const safeReturnTo = normalizeLocalReturnUrl(returnTo || `${window.location.pathname}${window.location.search}`);
+        if (safeReturnTo) {
+            sessionStorage.setItem('cathering_post_login_return_url', safeReturnTo);
+        }
+
+        return oidc.signinRedirect({
+            state: safeReturnTo ? { returnTo: safeReturnTo } : undefined
+        });
+    }, [oidc]);
+
+    const register = useCallback((returnTo) => {
+        const safeReturnTo = normalizeLocalReturnUrl(returnTo || `${window.location.pathname}${window.location.search}`);
+        if (safeReturnTo) {
+            sessionStorage.setItem('cathering_post_login_return_url', safeReturnTo);
+        }
+
+        return oidc.signinRedirect({
+            state: safeReturnTo ? { returnTo: safeReturnTo } : undefined,
+            extraQueryParams: { kc_action: 'register' }
+        });
+    }, [oidc]);
+
+    const logout = useCallback(() => {
+        oidc.removeUser();
+        oidc.signoutRedirect();
+    }, [oidc]);
+
     const contextValue = useMemo(() => ({
         token,
         user,
         isAuthenticated: oidc.isAuthenticated,
         loading: oidc.isLoading,
-        login: () => oidc.signinRedirect(),
-        register: () => oidc.signinRedirect({ extraQueryParams: { kc_action: 'register' } }), // Opcional, delega a Keycloak
-        logout: () => {
-            oidc.removeUser();
-            oidc.signoutRedirect();
-        },
+        login,
+        register,
+        logout,
         userService,
         colegioService,
         productService,
         orderService,
         walletService
     }), [
-        token, user, oidc.isAuthenticated, oidc.isLoading, oidc,
+        token, user, oidc.isAuthenticated, oidc.isLoading, login, register, logout,
         userService, colegioService, productService, orderService, walletService
     ]);
 
@@ -96,3 +121,38 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+function extractCatheringRoles(decodedToken) {
+    const roles = new Set([
+        ...(decodedToken.realm_access?.roles || []),
+        ...(decodedToken.resource_access?.['cathering-react']?.roles || []),
+        ...(decodedToken.resource_access?.['cathering-backend']?.roles || [])
+    ]);
+
+    if (roles.has('cathering_admin')) {
+        roles.add('admin');
+    }
+    if (roles.has('cathering_estudiante')) {
+        roles.add('estudiante');
+    }
+    if (roles.has('cathering_cafeteria')) {
+        roles.add('cafeteria');
+    }
+    if (roles.has('cathering_personal_academico')) {
+        roles.add('personal_academico');
+    }
+
+    return Array.from(roles);
+}
+
+function normalizeLocalReturnUrl(url) {
+    if (!url || typeof url !== 'string') return null;
+    if (!url.startsWith('/') || url.startsWith('//')) return null;
+
+    const path = url.split('#')[0];
+    if (path === '/login' || path === '/register' || path.startsWith('/login?') || path.startsWith('/register?')) {
+        return null;
+    }
+
+    return url;
+}

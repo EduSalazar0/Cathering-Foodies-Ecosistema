@@ -15,6 +15,8 @@
 **/dist/
 **/.vite/
 **/.cache/
+**/bin/
+**/obj/
 
 # ==========================================
 # Persistencia de Datos Local (Bases de Datos)
@@ -27,7 +29,9 @@
 # Infraestructura y Volúmenes Locales (Docker)
 # ==========================================
 # Ignorar datos locales generados por LocalStack y Keycloak en el host
-**/keycloak-data/
+**/keycloak-data/*
+!keycloak-data/
+!keycloak-data/proyecto-seguro-realm.json
 **/localstack_data/
 **/.docker/
 

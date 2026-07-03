@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const axios = require('axios');
 const kmsService = require('../services/KmsService');
 
 class OrderController {
@@ -104,6 +105,55 @@ class OrderController {
             res.status(500).json({ error: "Error procesando el pedido: " + error.message });
         }
     }
+
+    async syncWithFoodies(req, res) {
+        try {
+            const user = req.user || {};
+            const targetUrl = process.env.FOODIES_INTEGRATION_URL || 'http://host.docker.internal:5000/integration/cathering';
+            const payload = {
+                sub: user.sub || user.id,
+                username: user.preferred_username || user.username || user.email,
+                email: user.email,
+                roles: user.realm_access?.roles || [],
+                actionType: 'SYNC_RESERVA_CATHERING',
+                sourceSystem: 'APP_CATHERING_NODEJS',
+                targetSystem: 'FOODIES_BACKWEB_NET9',
+                timestamp: new Date().toISOString(),
+                data: req.body
+            };
+
+            const encryptedPayload = await kmsService.encryptData(JSON.stringify(payload));
+            const integrationEnvelope = {
+                integrationHeader: {
+                    sourceSystem: 'APP_CATHERING_NODEJS',
+                    targetSystem: 'FOODIES_BACKWEB_NET9',
+                    timestamp: payload.timestamp,
+                    kmsAlias: 'alias/cathering-wallet-key'
+                },
+                encryptedPayload
+            };
+
+            const response = await axios.post(targetUrl, integrationEnvelope, {
+                headers: {
+                    Authorization: req.headers.authorization || '',
+                    'x-source-system': 'APP_CATHERING_NODEJS'
+                },
+                timeout: 10000
+            });
+
+            res.status(200).json({
+                message: 'Trama cifrada enviada a Foodies correctamente',
+                foodiesResponse: response.data
+            });
+        } catch (error) {
+            console.error('[Integracion Foodies] Error al sincronizar trama cifrada:', error.message);
+            res.status(502).json({
+                error: 'No se pudo sincronizar con Foodies',
+                details: error.response?.data || error.message
+            });
+        }
+    }
+
     async getIncomingOrders(req, res) {
         try {
             const user = req.user;

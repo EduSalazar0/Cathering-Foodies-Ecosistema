@@ -1,0 +1,200 @@
+<main class="info-restaurante-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">¿Eres Restaurante?</h1>
+        <h2 class="hero-subtitle">Únete a FoodiesBNB</h2>
+        <p class="hero-description">
+          Forma parte de la plataforma gastronómica más innovadora del país. 
+          Conecta con microinfluencers locales y obtén contenido UGC de calidad para promocionar tu negocio.
+        </p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">1K+</span>
+            <span class="stat-label">Microinfluencers</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">50+</span>
+            <span class="stat-label">Negocios Activos</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">100K+</span>
+            <span class="stat-label">Alcance Mensual</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="/img/Login.webp" alt="FoodiesBNB Restaurantes" class="hero-img">
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios Section -->
+  <section class="beneficios-section">
+    <div class="section-container">
+      <div class="section-header">
+        <h2 class="section-title">Beneficios</h2>
+        <p class="section-subtitle">
+          Descubre todas las ventajas que obtendrás al formar parte de nuestra red de negocios
+        </p>
+      </div>
+      
+      <div class="beneficios-grid">
+        <div *ngFor="let beneficio of beneficios" class="beneficio-card">
+          <div class="beneficio-icon">
+            <i [class]="beneficio.icon"></i>
+          </div>
+          
+          <div class="beneficio-content">
+            <h3 class="beneficio-titulo">{{ beneficio.titulo }}</h3>
+            <p class="beneficio-descripcion">{{ beneficio.descripcion }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo Funciona Section -->
+  <section class="como-funciona-section">
+    <div class="section-container">
+      <div class="section-header">
+        <h2 class="section-title">¿Cómo Funciona?</h2>
+        <p class="section-subtitle">Un proceso simple para comenzar a recibir microinfluencers y generar contenido UGC</p>
+      </div>
+      
+      <div class="proceso-steps">
+        <div class="step-item">
+          <div class="step-icon">
+            <i class="fas fa-phone-alt"></i>
+          </div>
+          
+          <div class="step-content">
+            <h3>Contacto Inicial</h3>
+            <p>Nos contactas y evaluamos tu negocio para asegurar que cumple con nuestros estándares estéticos y requisitos.</p>
+          </div>
+        </div>
+        
+        <div class="step-item">
+          <div class="step-icon">
+            <i class="fas fa-cogs"></i>
+          </div>
+          
+          <div class="step-content">
+            <h3>Configuración</h3>
+            <p>Te ayudamos a configurar tu perfil, menús y disponibilidad en nuestra plataforma.</p>
+          </div>
+        </div>
+        
+        <div class="step-item">
+          <div class="step-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          
+          <div class="step-content">
+            <h3>Recibe Microinfluencers</h3>
+            <p>Comienza a recibir microinfluencers verificados que crearán contenido UGC auténtico para tu negocio.</p>
+          </div>
+        </div>
+        
+        <div class="step-item">
+          <div class="step-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="step-content">
+            <h3>Crece tu Negocio</h3>
+            <p>Aprovecha el contenido UGC constante y el alcance de miles de seguidores para hacer crecer tu negocio.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Requisitos Section -->
+  <section class="requisitos-section">
+    <div class="section-container">
+      <div class="requisitos-content">
+        <div class="requisitos-text">
+          <h2 class="section-title">Requisitos para Unirse</h2>
+          <p class="section-subtitle">
+            Queremos asegurar la mejor experiencia para nuestros microinfluencers y la calidad del contenido UGC
+          </p>
+          
+          <ul class="requisitos-list">
+            <li *ngFor="let requisito of requisitos" class="requisito-item">
+              <i class="fas fa-check-circle"></i>
+              <span>{{ requisito }}</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="requisitos-image">
+          <img src="/img/Login.webp" alt="FoodiesBNB Restaurantes" class="requisitos-img">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto Section -->
+  <section class="contacto-section">
+    <div class="section-container">
+      <div class="contacto-content">
+        <div class="contacto-header">
+          <h2 class="section-title">¿Listo para Unirte?</h2>
+          <p class="section-subtitle">
+            Contáctanos ahora y comienza a formar parte de la red de negocios de FoodiesBNB
+          </p>
+        </div>
+        
+        <div class="contacto-methods">
+          <div class="contacto-card" (click)="abrirWhatsApp()">
+            <div class="contacto-icon whatsapp">
+              <i class="fab fa-whatsapp"></i>
+            </div>
+            <div class="contacto-info">
+              <h3>WhatsApp</h3>
+              <p>{{ contactInfo.whatsapp }}</p>
+              <span class="contacto-action">Enviar mensaje</span>
+            </div>
+          </div>
+          
+          <div class="contacto-card" (click)="enviarEmail()">
+            <div class="contacto-icon email">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contacto-info">
+              <h3>Email</h3>
+              <p>{{ contactInfo.email }}</p>
+              <span class="contacto-action">Enviar email</span>
+            </div>
+          </div>
+          
+          <div class="contacto-card" (click)="llamarTelefono()">
+            <div class="contacto-icon telefono">
+              <i class="fas fa-phone"></i>
+            </div>
+            <div class="contacto-info">
+              <h3>Teléfono</h3>
+              <p>{{ contactInfo.telefono }}</p>
+              <span class="contacto-action">Llamar ahora</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="contacto-footer">
+          <p class="horarios">
+            <i class="fas fa-clock"></i>
+            Horario de atención: Lunes a Viernes 9:00 AM - 6:00 PM
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Botón flotante de WhatsApp -->
+<div class="whatsapp-float">
+  <button class="whatsapp-float-btn" (click)="abrirWhatsApp()" title="Contactar por WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </button>
+</div>

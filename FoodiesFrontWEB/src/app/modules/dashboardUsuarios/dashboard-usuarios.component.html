@@ -1,0 +1,90 @@
+<!-- Contenido Principal del Dashboard -->
+<main class="dashboard-content">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Restaurantes FoodiesBNB</h1>
+      <p class="hero-subtitle">Explora restaurantes y vive experiencias de un verdadero Foodie</p>
+    </div>
+  </section>
+
+  <!-- Search & Filters Section -->
+  <section class="search-section">
+    <div class="search-container">
+      <div class="search-bar-inline">
+        <div class="search-input-group">
+          <i class="pi pi-search"></i>
+          <input 
+            type="text" 
+            placeholder="Buscar restaurantes por nombre..."
+            class="search-input"
+            [(ngModel)]="searchTerm"
+            (input)="onSearchInput($event)">
+        </div>
+        
+        <div class="filters-inline">
+          <div class="filter-group-small">
+            <i class="pi pi-map-marker"></i>
+            <select class="filter-select-small" [(ngModel)]="selectedUbicacion" (change)="onUbicacionChange($event)">
+              <option value="">Ubicación</option>
+              <option value="quito">Quito</option>
+              <option value="guayaquil">Guayaquil</option>
+              <option value="cuenca">Cuenca</option>
+              <option value="cumbaya">Cumbayá</option>
+            </select>
+          </div>
+          
+          <div class="filter-group-small">
+            <i class="pi pi-tags"></i>
+            <select class="filter-select-small" [(ngModel)]="selectedTipoCocina" (change)="onTipoCocinaChange($event)">
+              <option value="">Tipo de cocina</option>
+              <option value="brunch">Brunch</option>
+              <option value="pizza">Pizza</option>
+              <option value="pasta">Pasta</option>
+              <option value="grill">Grill</option>
+              <option value="sushi">Sushi</option>
+            </select>
+          </div>
+          
+          <button class="search-btn-small" type="button" (click)="onSearch()">
+            Buscar
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Restaurants Grid -->
+  <section class="restaurants-section">
+    <div class="section-header">
+      <h2 class="section-title">Restaurantes Destacados</h2>
+      <p class="section-subtitle">Descubre los mejores lugares para comer</p>
+    </div>
+    
+    <div class="restaurants-grid">
+      <article 
+        *ngFor="let restaurante of restaurantesFiltrados" 
+        class="restaurant-card">
+        
+        <div class="card-image-container">
+          <img [src]="restaurante.imagen" 
+               [alt]="restaurante.nombre" 
+               class="card-image"
+               loading="lazy">
+          
+          <div class="card-overlay">
+            <span class="category-badge">{{ restaurante.tipo }}</span>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <h3 class="restaurant-name">{{ restaurante.nombre }}</h3>
+          <p class="restaurant-location">
+            <i class="pi pi-map-marker"></i>
+            {{ restaurante.ubicacion }}
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>

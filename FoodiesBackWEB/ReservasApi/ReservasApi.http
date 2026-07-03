@@ -1,0 +1,113 @@
+### ReservasApi - CRUD Completo para Reservas y Entregables
+### Puerto: 5004
+
+@baseUrl = http://localhost:5004/api
+@authToken = Bearer YOUR_JWT_TOKEN_HERE
+
+### ============ RESERVAS ============
+
+### 1. Crear nueva reserva
+POST {{baseUrl}}/reservas
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "nombreLocal": "Macchiata",
+  "fecha": "2025-10-15T00:00:00.000Z",
+  "hora": "19:30",
+  "numeroPersonas": 2
+}
+
+### 2. Obtener mis reservas
+GET {{baseUrl}}/reservas/mis-reservas
+Authorization: {{authToken}}
+
+### 3. Obtener reserva por ID
+GET {{baseUrl}}/reservas/1
+Authorization: {{authToken}}
+
+### 4. Actualizar reserva
+PUT {{baseUrl}}/reservas/1
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "nombreLocal": "Michael's Restaurant",
+  "fecha": "2025-10-16T00:00:00.000Z",
+  "hora": "20:00",
+  "numeroPersonas": 4,
+  "estadoReserva": "Visita Completada"
+}
+
+### 5. Cambiar estado de reserva
+PATCH {{baseUrl}}/reservas/1/estado
+Content-Type: application/json
+Authorization: {{authToken}}
+
+"Visita Completada"
+
+### 6. Obtener reservas por estado
+GET {{baseUrl}}/reservas/por-estado/Por Ir
+Authorization: {{authToken}}
+
+### 7. Obtener reservas por rango de fechas
+GET {{baseUrl}}/reservas/por-fecha?fechaInicio=2025-10-01&fechaFin=2025-10-31
+Authorization: {{authToken}}
+
+### 8. Eliminar reserva
+DELETE {{baseUrl}}/reservas/1
+Authorization: {{authToken}}
+
+### ============ ENTREGABLES ============
+
+### 9. Crear entregable para una reserva
+POST {{baseUrl}}/entregables
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "reservaId": 1,
+  "enlaceTikTok": "https://www.tiktok.com/@usuario/video/123456789",
+  "enlaceInstagram": "https://www.instagram.com/p/ABC123DEF456/",
+  "cantidadGastada": 45.50
+}
+
+### 10. Obtener entregables por reserva
+GET {{baseUrl}}/entregables/por-reserva/1
+Authorization: {{authToken}}
+
+### 11. Obtener entregable por ID
+GET {{baseUrl}}/entregables/1
+Authorization: {{authToken}}
+
+### 12. Actualizar entregable
+PUT {{baseUrl}}/entregables/1
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "reservaId": 1,
+  "enlaceTikTok": "https://www.tiktok.com/@usuario/video/987654321",
+  "enlaceInstagram": "https://www.instagram.com/p/XYZ789ABC123/",
+  "cantidadGastada": 55.75
+}
+
+### 13. Eliminar entregable
+DELETE {{baseUrl}}/entregables/1
+Authorization: {{authToken}}
+
+### ============ ADMIN ENDPOINTS ============
+
+### 14. Obtener todas las reservas (Solo Admin)
+GET {{baseUrl}}/reservas
+Authorization: {{authToken}}
+
+### 15. Obtener todos los entregables (Solo Admin)
+GET {{baseUrl}}/entregables
+Authorization: {{authToken}}
+
+### ============ SALUD DE LA API ============
+
+### 16. Test de conectividad
+GET {{baseUrl}}/reservas/mis-reservas
+Authorization: {{authToken}}

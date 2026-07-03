@@ -1,0 +1,31 @@
+<div class="flex flex-col gap-1">
+    <p-floatlabel>
+        <p-autocomplete 
+            [id]="formControlName"
+            [(ngModel)]="value"
+            [suggestions]="values"
+            [invalid]="formField.invalid && (formField.dirty || formField.touched)"
+            (completeMethod)="onComplete($event)"
+            (onSelect)="onSelectionChange($event.value)"
+            (onClear)="onSelectionChange(null)"
+            [optionLabel]="optionLabel"
+            [minLength]="minlength"
+            [forceSelection]="false"
+            [showEmptyMessage]="true"
+            appendTo="body"
+            [disabled]="isDisabled"
+            fluid>
+            <ng-template let-item pTemplate="item">
+                <div class="p-fluid">
+                    <div *ngFor="let title of titles.slice(0, cantidadCampos); let i = index" class="p-field" [ngClass]="'label' + i">
+                        {{item[title] ?? ""}}
+                    </div>
+                </div>
+            </ng-template>
+        </p-autocomplete>
+        <label [for]="formControlName">{{label}}</label>
+    </p-floatlabel>
+    @if (formField.invalid && (formField.dirty || formField.touched)) {
+        <app-field-errors [errors]="formField.errors"></app-field-errors>
+    }
+</div>

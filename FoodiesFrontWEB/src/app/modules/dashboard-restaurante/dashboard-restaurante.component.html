@@ -1,0 +1,155 @@
+<main class="dashboard-container">
+  <!-- Header del Dashboard -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="dashboard-title">
+        <i class="fas fa-utensils"></i>
+        Dashboard Restaurante
+      </h1>
+      <p class="dashboard-subtitle">
+        Gestiona las reservas de microinfluencers en tu establecimiento
+      </p>
+    </div>
+    
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="cargarReservas()" [disabled]="loading">
+        <i class="fas fa-sync-alt" [class.spinning]="loading"></i>
+        Actualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- Estadísticas Rápidas -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon confirmada">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{ (reservas | filter:'estadoReserva':'Visita Completada').length }}</span>
+        <span class="stat-label">Completadas</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon pendiente">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{ (reservas | filter:'estadoReserva':'Por Ir').length }}</span>
+        <span class="stat-label">Por Ir</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon completada">
+        <i class="fas fa-star"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{ (reservas | filter:'estadoReserva':'Falta Grave').length }}</span>
+        <span class="stat-label">Falta Grave</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon total">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{ reservas.length }}</span>
+        <span class="stat-label">Total Reservas</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de Reservas -->
+  <div class="table-container">
+    <div class="table-header">
+      <h2 class="table-title">
+        <i class="fas fa-calendar-alt"></i>
+        Reservas Activas
+      </h2>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+      </div>
+      <p>Cargando reservas...</p>
+    </div>
+
+    <!-- Tabla -->
+    <div *ngIf="!loading" class="table-wrapper">
+      <table class="reservas-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre Foodie</th>
+            <!-- <th>Correo Foodie</th> -->
+            <th>Fecha & Hora</th>
+            <th>Personas</th>
+            <th>Estado</th>
+            <th>Local</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reserva of reservas" class="table-row">
+            <td class="cell-id">
+              <span class="id-badge">#{{ reserva.id }}</span>
+            </td>
+            
+            <td class="cell-nombre">
+              <div class="nombre-info">
+                <i class="fas fa-user-circle"></i>
+                <span class="nombre-text">{{ reserva.nombreUsuario || 'Foodie #' + reserva.usuarioId }}</span>
+              </div>
+            </td>
+            
+            <!-- <td class="cell-correo">
+              <div class="correo-info">
+                <i class="fas fa-envelope"></i>
+                <span class="correo-text">{{ reserva.correoUsuario || 'Sin correo' }}</span>
+              </div>
+            </td> -->
+            
+            <td class="cell-fecha">
+              <div class="fecha-info">
+                <span class="fecha">{{ formatearFecha(reserva.fecha) }}</span>
+                <span class="hora">{{ formatearHora(reserva.hora) }}</span>
+              </div>
+            </td>
+            
+            <td class="cell-personas">
+              <div class="personas-badge">
+                <i class="fas fa-users"></i>
+                <span>{{ reserva.numeroPersonas }}</span>
+              </div>
+            </td>
+            
+            <td class="cell-estado">
+              <span class="estado-badge" [ngClass]="getEstadoClass(reserva.estadoReserva)">
+                {{ reserva.estadoReserva }}
+              </span>
+            </td>
+            
+            <td class="cell-entregables">
+              <div class="local-info">
+                <span class="local-name">{{ reserva.nombreLocal }}</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <!-- Estado vacío -->
+      <div *ngIf="reservas.length === 0" class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-calendar-times"></i>
+        </div>
+        <h3>No hay reservas disponibles</h3>
+        <p>Las reservas de microinfluencers aparecerán aquí cuando se realicen.</p>
+      </div>
+    </div>
+  </div>
+</main>

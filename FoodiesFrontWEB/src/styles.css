@@ -1,0 +1,211 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import "primeicons/primeicons.css";
+
+/* Configuración de tipografías globales FoodiesBNB */
+body {
+  font-family: 'Ubuntu', 'system-ui', Arial, sans-serif;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+
+/* Tipografías específicas globales */
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Ubuntu', 'system-ui', Arial, sans-serif;
+  font-weight: 500;
+}
+
+p, .font-body, .p-component {
+  font-family: 'Poppins', 'system-ui', Arial, sans-serif;
+  font-weight: 400;
+}
+
+/* Variables globales FoodiesBNB */
+:root {
+  --header-height: 64px;
+  --primary-color: rgb(254, 57, 94);
+  --primary-hover: rgb(229, 51, 90);
+  --white-color: #ffffff;
+  --font-heading: 'Ubuntu', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+  --text-dark: #1a1a1a;
+  --text-gray: #666666;
+  --text-light: #999999;
+  --border-color: #dddddd;
+  --error-color: #e74c3c;
+  --success-color: #27ae60;
+}
+
+/* Estilos específicos globales para FoodiesBNB */
+.foodies-primary {
+  color: rgb(254, 57, 94) !important;
+}
+
+.bg-foodies-primary {
+  background-color: rgb(254, 57, 94) !important;
+}
+
+.border-foodies-primary {
+  border-color: rgb(254, 57, 94) !important;
+}
+
+/* Estilos para componentes PrimeNG con colores FoodiesBNB */
+.p-button.p-button-primary {
+  background-color: rgb(254, 57, 94) !important;
+  border-color: rgb(254, 57, 94) !important;
+}
+
+.p-button.p-button-primary:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+}
+
+.p-inputtext:focus {
+  border-color: rgb(254, 57, 94) !important;
+  box-shadow: 0 0 0 0.2rem rgba(254, 57, 94, 0.2) !important;
+}
+
+.p-password input:focus {
+  border-color: rgb(254, 57, 94) !important;
+  box-shadow: 0 0 0 0.2rem rgba(254, 57, 94, 0.2) !important;
+}
+
+/* Clases de utilidad básicas */
+.min-h-screen { min-height: 100vh; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.text-center { text-align: center; }
+.p-4 { padding: 1rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-6 { margin-top: 1.5rem; }
+.w-full { width: 100%; }
+.max-w-md { max-width: 28rem; }
+.grid { display: grid; }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.gap-2 { gap: 0.5rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.font-bold { font-weight: 700; }
+.text-gray-900 { color: rgb(33, 33, 33); }
+.text-gray-600 { color: rgb(117, 117, 117); }
+.text-gray-500 { color: rgb(158, 158, 158); }
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-blue-600 { color: rgb(37, 99, 235); }
+.text-black { color: #000000; }
+.hover\:underline:hover { text-decoration: underline; }
+
+/* Estilos globales para PrimeNG Toast */
+.p-toast {
+  z-index: 9999 !important;
+}
+
+.p-toast .p-toast-message {
+  margin: 0 0 1rem 0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 12px !important;
+  border: none !important;
+  backdrop-filter: blur(10px) !important;
+  min-width: 350px !important;
+}
+
+.p-toast .p-toast-message-success {
+  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+  color: white !important;
+}
+
+.p-toast .p-toast-message-error {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: white !important;
+}
+
+.p-toast .p-toast-message-warn {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: white !important;
+}
+
+.p-toast .p-toast-message-content {
+  padding: 1rem 1.25rem !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.75rem !important;
+}
+
+.p-toast .p-toast-icon {
+  font-size: 1.25rem !important;
+  margin-top: 0.125rem !important;
+  color: white !important;
+}
+
+.p-toast .p-toast-message-text {
+  flex: 1 !important;
+}
+
+.p-toast .p-toast-summary {
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  margin-bottom: 0.25rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  color: white !important;
+}
+
+.p-toast .p-toast-detail {
+  font-weight: 400 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+  opacity: 0.95 !important;
+  color: white !important;
+}
+
+.p-toast .p-toast-icon-close {
+  color: white !important;
+  opacity: 0.8 !important;
+  font-size: 1rem !important;
+  margin-top: 0.125rem !important;
+}
+
+.p-toast .p-toast-icon-close:hover {
+  opacity: 1 !important;
+}
+
+/* Animaciones para toast */
+.p-toast .p-toast-message {
+  animation: slideInToast 0.3s ease-out !important;
+}
+
+@keyframes slideInToast {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive para toast */
+@media (max-width: 768px) {
+  .p-toast .p-toast-message {
+    min-width: 280px !important;
+    margin: 0 0 0.75rem 0 !important;
+  }
+  
+  .p-toast .p-toast-message-content {
+    padding: 0.875rem 1rem !important;
+  }
+  
+  .p-toast .p-toast-summary {
+    font-size: 0.9rem !important;
+  }
+  
+  .p-toast .p-toast-detail {
+    font-size: 0.8rem !important;
+  }
+}

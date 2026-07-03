@@ -1,0 +1,69 @@
+<div class="card">
+  <p-table
+    #dt
+    [value]="data"
+    [columns]="columns"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [globalFilterFields]="globalFilterFields"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="caption">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-semibold text-gray-800 m-0">{{ title }}</h2>
+    <div class="relative" *ngIf="showGlobalFilter">
+      <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+        <i class="pi pi-search text-gray-400"></i>
+      </span>
+      <input
+        (input)="applyGlobalFilter(dt, $event)"
+        placeholder="Buscar..."
+        class="p-inputtext p-component w-full ml-9 md:w-auto pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-500"
+      />
+    </div>
+  </div>
+</ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          {{ col.header }}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+        <th *ngIf="actionsTemplate" class="w-1/12 text-center">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td *ngFor="let col of columns">
+          <ng-container *ngIf="bodyTemplates[col.field]; else defaultCell">
+            <ng-container 
+              [ngTemplateOutlet]="bodyTemplates[col.field]" 
+              [ngTemplateOutletContext]="{ $implicit: rowData }">
+            </ng-container>
+          </ng-container>
+          <ng-template #defaultCell>
+            {{ rowData[col.field] }}
+          </ng-template>
+        </td>
+        <td *ngIf="actionsTemplate" class="text-center">
+          <ng-container 
+            [ngTemplateOutlet]="actionsTemplate" 
+            [ngTemplateOutletContext]="{ $implicit: rowData }">
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [attr.colspan]="columns.length + (actionsTemplate ? 1 : 0)" class="text-center p-4">
+          No se encontraron registros.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

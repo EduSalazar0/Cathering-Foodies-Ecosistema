@@ -1,0 +1,366 @@
+<!-- Contenido Principal del Formulario Foodie -->
+<main class="formulario-content">
+  <!-- Header Section -->
+  <section class="header-section">
+    <div class="header-content">
+      <h1 class="main-title">
+        {{ isEditing ? 'Actualizar Información' : 'Aplicación Para' }} 
+        <span class="highlight">Foodies</span>
+      </h1>
+      <p class="main-subtitle">
+        {{ isEditing ? 'Modifica tu información y mantén tu perfil actualizado.' : 'Completa la información y únete a FoodiesBNB.' }}
+      </p>
+    </div>
+  </section>
+
+  <!-- Requisitos Section -->
+  <section class="requisitos-section">
+    <div class="requisitos-container">
+      <h2 class="requisitos-title">
+        <i class="pi pi-star-fill"></i>
+        Requisitos para ser Foodie
+      </h2>
+      
+      <div class="requisitos-grid">
+        <div class="requisito-card">
+          <div class="requisito-icon">
+            <i class="pi pi-instagram"></i>
+          </div>
+          <h3 class="requisito-titulo">Contenido en Redes</h3>
+          <p class="requisito-descripcion">Subir contenido a Instagram o TikTok regularmente</p>
+        </div>
+        
+        <div class="requisito-card">
+          <div class="requisito-icon">
+            <i class="pi pi-users"></i>
+          </div>
+          <h3 class="requisito-titulo">Mínimo de Seguidores</h3>
+          <p class="requisito-descripcion">Tener mínimo <strong>1.000 seguidores</strong> en cualquier plataforma</p>
+        </div>
+        
+        <div class="requisito-card">
+          <div class="requisito-icon">
+            <i class="pi pi-unlock"></i>
+          </div>
+          <h3 class="requisito-titulo">Cuenta Pública</h3>
+          <p class="requisito-descripcion">Tener la cuenta de Instagram pública, no privada</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Formulario Section -->
+  <section class="formulario-section">
+    <div class="formulario-container">
+      <form [formGroup]="foodieForm" (ngSubmit)="onSubmit()" class="foodie-form">
+        
+        <!-- Información Personal -->
+        <div class="form-group">
+          <label for="nombreCompleto" class="form-label">
+            Nombre y apellido <span class="required">*</span>
+          </label>
+          <input
+            id="nombreCompleto"
+            type="text"
+            formControlName="nombreCompleto"
+            placeholder="Nombre y apellido"
+            class="form-input"
+            [class.invalid]="nombreCompletoInvalid">
+          <div *ngIf="nombreCompletoInvalid" class="error-message">
+            <i class="pi pi-exclamation-triangle"></i>
+            El nombre completo es requerido (mínimo 3 caracteres)
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">
+            Email <span class="required">*</span>
+          </label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="Email"
+            class="form-input"
+            [class.invalid]="emailInvalid">
+          <div *ngIf="emailInvalid" class="error-message">
+            <i class="pi pi-exclamation-triangle"></i>
+            Ingresa un email válido
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="numeroPersonal" class="form-label">
+            Número personal <span class="required">*</span>
+          </label>
+          <div class="phone-input-group">
+            <div class="country-selector">
+              <img src="https://flagcdn.com/w20/ec.png" alt="Ecuador" class="flag-icon">
+              <span>🇪🇨</span>
+            </div>
+            <input
+              id="numeroPersonal"
+              type="tel"
+              formControlName="numeroPersonal"
+              placeholder="Número personal"
+              class="form-input phone-input"
+              [class.invalid]="numeroPersonalInvalid">
+          </div>
+          <div *ngIf="numeroPersonalInvalid" class="error-message">
+            <i class="pi pi-exclamation-triangle"></i>
+            Ingresa un número de 10 dígitos
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fechaNacimiento" class="form-label">
+            Fecha de nacimiento <span class="required">*</span>
+          </label>
+          <input
+            id="fechaNacimiento"
+            type="date"
+            formControlName="fechaNacimiento"
+            placeholder="dd/mm/aaaa"
+            class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Género <span class="required">*</span>
+          </label>
+          <div class="radio-group">
+            <div *ngFor="let opcion of generoOpciones" class="radio-item">
+              <input
+                type="radio"
+                [id]="'genero-' + opcion.value"
+                [value]="opcion.value"
+                formControlName="genero"
+                class="radio-input">
+              <label [for]="'genero-' + opcion.value" class="radio-label">
+                {{ opcion.label }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="form-group">
+          <label for="pais" class="form-label">
+            País donde vives <span class="required">*</span> <i class="pi pi-check-circle success-icon"></i>
+          </label>
+          <select id="pais" formControlName="pais" class="form-select">
+            <option *ngFor="let pais of paisesDisponibles" [value]="pais.value">
+              {{ pais.label }}
+            </option>
+          </select>
+          <small class="form-hint">(Solamente aceptamos Ecuador)</small>
+        </div>
+
+        <div class="form-group">
+          <label for="ciudad" class="form-label">
+            Ciudad donde vives (no el sector, ni las calles, solo ciudad) <span class="required">*</span>
+          </label>
+          <select id="ciudad" formControlName="ciudad" class="form-select">
+            <option value="">Selecciona tu ciudad</option>
+            <option *ngFor="let ciudad of ciudadesDisponibles" [value]="ciudad.value">
+              {{ ciudad.label }}
+            </option>
+          </select>
+          <small class="form-hint">(Solamente aceptamos Quito y Guayaquil)</small>
+        </div>
+
+        <!-- Contenido en Redes -->
+        <div class="form-group">
+          <label for="frecuenciaContenido" class="form-label">
+            ¿Cada cuánto subes contenido en redes? <span class="required">*</span>
+          </label>
+          <select id="frecuenciaContenido" formControlName="frecuenciaContenido" class="form-select">
+            <option value="">Selecciona</option>
+            <option *ngFor="let frecuencia of frecuenciaContenido" [value]="frecuencia.value">
+              {{ frecuencia.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Instagram -->
+        <div class="form-group">
+          <label for="usuarioInstagram" class="form-label">
+            Usuario de Instagram <span class="required">*</span>
+          </label>
+          <input
+            id="usuarioInstagram"
+            type="text"
+            formControlName="usuarioInstagram"
+            placeholder="@usuario"
+            class="form-input"
+            [class.invalid]="usuarioInstagramInvalid">
+          <div *ngIf="usuarioInstagramInvalid" class="error-message">
+            <i class="pi pi-exclamation-triangle"></i>
+            Ingresa un usuario válido (ej: @usuario)
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="seguidoresInstagram" class="form-label">
+            Seguidores en Instagram (sin puntos ni comas) <span class="required">*</span>
+          </label>
+          <input
+            id="seguidoresInstagram"
+            type="text"
+            formControlName="seguidoresInstagram"
+            placeholder="ej: 2200"
+            class="form-input"
+            [class.invalid]="seguidoresInstagramInvalid"
+            (keypress)="onSeguidoresKeypress($event)"
+            (paste)="onSeguidoresPaste($event)"
+            (input)="onSeguidoresInput($event, 'seguidoresInstagram')"
+            min="1000">
+          <small class="form-hint">(SIN puntos ni comas, SOLO el número)</small>
+          <div *ngIf="seguidoresInstagramInvalid" class="error-message">
+            <i class="pi pi-exclamation-triangle"></i>
+            Mínimo 1000 seguidores requeridos
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            ¿Tienes tu cuenta de Instagram pública? <span class="required">*</span>
+          </label>
+          <div class="radio-group">
+            <div *ngFor="let opcion of cuentaPublicaOpciones" class="radio-item">
+              <input
+                type="radio"
+                [id]="'cuenta-' + opcion.value"
+                [value]="opcion.value"
+                formControlName="cuentaPublica"
+                class="radio-input">
+              <label [for]="'cuenta-' + opcion.value" class="radio-label">
+                {{ opcion.label }}
+              </label>
+            </div>
+          </div>
+          <small class="form-hint">(Solo aceptamos cuentas públicas)</small>
+        </div>
+
+        <!-- TikTok -->
+        <div class="form-group">
+          <label for="usuarioTikTok" class="form-label">
+            Usuario de TikTok <span class="required">*</span>
+          </label>
+          <input
+            id="usuarioTikTok"
+            type="text"
+            formControlName="usuarioTikTok"
+            placeholder="@usuario"
+            class="form-input"
+            [class.invalid]="usuarioTikTokInvalid">
+          <div *ngIf="usuarioTikTokInvalid" class="error-message">
+            <i class="pi pi-exclamation-triangle"></i>
+            Ingresa un usuario válido (ej: @usuario)
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="seguidoresTikTok" class="form-label">
+            Seguidores en TikTok (sin puntos ni comas) <span class="required">*</span>
+          </label>
+          <input
+            id="seguidoresTikTok"
+            type="text"
+            formControlName="seguidoresTikTok"
+            placeholder="ej: 2200"
+            class="form-input"
+            [class.invalid]="seguidoresTikTokInvalid"
+            (keypress)="onSeguidoresKeypress($event)"
+            (paste)="onSeguidoresPaste($event)"
+            (input)="onSeguidoresInput($event, 'seguidoresTikTok')"
+            min="1000">
+          <small class="form-hint">(SIN puntos ni comas, SOLO el número)</small>
+          <div *ngIf="seguidoresTikTokInvalid" class="error-message">
+            <i class="pi pi-exclamation-triangle"></i>
+            Mínimo 1000 seguidores requeridos
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="form-group">
+          <label for="sobreTi" class="form-label">
+            Sobre ti <span class="required">*</span>
+          </label>
+          <textarea
+            id="sobreTi"
+            formControlName="sobreTi"
+            placeholder="Cuéntanos sobre tu experiencia creando contenido y lo que buscas con esta colaboración (mínimo 20 caracteres)..."
+            class="form-textarea"
+            [class.invalid]="sobreTiInvalid"
+            rows="4"></textarea>
+          <div class="character-counter">
+            <span [class.text-danger]="caracteresRestantes > 0">
+              Caracteres: {{ caracteresTotales }}/20 mínimo
+            </span>
+          </div>
+          <div *ngIf="sobreTiInvalid" class="error-message">
+            <i class="pi pi-exclamation-triangle"></i>
+            Mínimo 20 caracteres requeridos
+          </div>
+        </div>
+
+        <!-- Beneficios -->
+        <div class="form-group">
+          <label class="form-label">
+            ¿Entiendes los beneficios ofrecidos y estás de acuerdo en aceptarlos? <span class="required">*</span>
+          </label>
+          <div class="radio-group">
+            <div *ngFor="let opcion of beneficiosOpciones" class="radio-item">
+              <input
+                type="radio"
+                [id]="'beneficios-' + opcion.value"
+                [value]="opcion.value"
+                formControlName="aceptaBeneficios"
+                class="radio-input">
+              <label [for]="'beneficios-' + opcion.value" class="radio-label">
+                {{ opcion.label }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Términos y Condiciones -->
+        <div class="form-group">
+          <div class="checkbox-item">
+            <input
+              type="checkbox"
+              id="aceptaTerminos"
+              formControlName="aceptaTerminos"
+              class="checkbox-input">
+            <label for="aceptaTerminos" class="checkbox-label">
+              Estoy de acuerdo en entregar mi información personal, que sea almacenada y tratada por FoodiesBNB. 
+              También estoy de acuerdo en ser contactado mediante los canales proporcionados.
+            </label>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="submit-btn"
+            [disabled]="foodieForm.invalid || isSaving"
+            [class.loading]="isSaving">
+            <i class="pi" [class.pi-spin]="isSaving" [class.pi-spinner]="isSaving" [class.pi-send]="!isSaving"></i>
+            <span *ngIf="!isSaving">{{ isEditing ? 'Actualizar Información' : 'Enviar Aplicación' }}</span>
+            <span *ngIf="isSaving">{{ isEditing ? 'Actualizando...' : 'Enviando...' }}</span>
+          </button>
+          
+          <!-- Notificación simple debajo del botón -->
+          <div *ngIf="notificationMessage" 
+               class="notification-message" 
+               [ngClass]="notificationType">
+            <i class="pi" [ngClass]="getNotificationIcon()"></i>
+            <span>{{ notificationMessage }}</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>

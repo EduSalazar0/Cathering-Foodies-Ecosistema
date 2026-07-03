@@ -1,0 +1,671 @@
+/* ===== VARIABLES FOODIESBNB ===== */
+:root {
+  --primary-color: #fe395e;
+  --primary-hover: #e6325a;
+  --secondary-color: #ff6b7a;
+  --accent-color: #ff8a95;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --text-dark: #2c3e50;
+  --text-gray: #6c757d;
+  --text-light: #ffffff;
+  --bg-light: #fef7f8;
+  --bg-white: #ffffff;
+  --bg-gradient: linear-gradient(135deg, #fe395e 0%, #ff6b7a 100%);
+  --border-color: #ffe4e8;
+  --shadow: 0 4px 6px rgba(254, 57, 94, 0.1);
+  --shadow-lg: 0 10px 40px rgba(254, 57, 94, 0.15);
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.info-restaurante-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-light) 0%, #fff0f2 100%);
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+/* ===== HERO SECTION ===== */
+.hero-section {
+  background: var(--bg-gradient);
+  color: var(--text-light);
+  padding: 6rem 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(254, 57, 94, 0.2);
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('/img/pattern.png') repeat;
+  opacity: 0.1;
+  z-index: 1;
+}
+
+.hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  color: black;
+}
+
+.hero-subtitle {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: Black;
+}
+
+.hero-description {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+  opacity: 0.95;
+  color: #000000;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-number {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  margin-bottom: 0.5rem;
+  color: black;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 500;
+  color: #333;
+}
+
+.hero-image {
+  text-align: center;
+}
+
+.hero-img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  transform: rotate(3deg);
+  transition: transform 0.3s ease;
+}
+
+.hero-img:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+/* ===== SECCIONES GENERALES ===== */
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-gray);
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== ICONOS ALTERNATIVOS SI PRIMEICONS NO CARGA ===== */
+.beneficio-icon .pi-video::before { content: "🎥"; }
+.beneficio-icon .pi-refresh::before { content: "🔄"; }
+.beneficio-icon .pi-bolt::before { content: "⚡"; }
+.beneficio-icon .pi-globe::before { content: "🌍"; }
+.beneficio-icon .pi-dollar::before { content: "💰"; }
+.beneficio-icon .pi-mobile::before { content: "📱"; }
+
+.beneficio-icon .pi:not([class*="::before"]) {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+/* ===== BENEFICIOS SECTION ===== */
+.beneficios-section {
+  background: var(--bg-white);
+}
+
+.beneficios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.beneficio-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+}
+
+.beneficio-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.beneficio-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--primary-color), #ff6b7a);
+  color: white;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin: 0 auto 1rem;
+  box-shadow: var(--shadow);
+}
+
+.beneficio-icon i {
+  font-size: 1.5rem !important;
+  color: white !important;
+  display: block;
+  line-height: 1;
+}
+
+/* Asegurar que los iconos de Font Awesome se muestren */
+.beneficio-icon .fas {
+  font-family: 'Font Awesome 6 Free' !important;
+  font-style: normal;
+  font-weight: 900;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.beneficio-content {
+  text-align: center;
+}
+
+.beneficio-titulo {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+}
+
+.beneficio-descripcion {
+  color: var(--text-gray);
+  line-height: 1.6;
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* ===== CÓMO FUNCIONA SECTION ===== */
+.como-funciona-section {
+  background: linear-gradient(135deg, var(--bg-light) 0%, #fff5f6 100%);
+}
+
+.proceso-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+}
+
+.step-item {
+  text-align: center;
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.step-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.step-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--primary-color), #ff6b7a);
+  color: white;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin: 0 auto 1rem;
+  box-shadow: var(--shadow);
+}
+
+.step-icon i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.step-icon .fas {
+  font-family: 'Font Awesome 6 Free' !important;
+  font-weight: 900;
+}
+
+.step-number {
+  width: 80px;
+  height: 80px;
+  background: var(--bg-gradient);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  margin: 0 auto 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.step-content h3 {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+}
+
+.step-content p {
+  color: var(--text-gray);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ===== REQUISITOS SECTION ===== */
+.requisitos-section {
+  background: var(--bg-white);
+}
+
+.requisitos-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.requisitos-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0 0;
+}
+
+.requisito-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.requisito-item:last-child {
+  border-bottom: none;
+}
+
+.requisito-item i {
+  color: var(--success-color);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.requisitos-image {
+  text-align: center;
+}
+
+.requisitos-img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===== CONTACTO SECTION ===== */
+.contacto-section {
+  background: linear-gradient(135deg, var(--bg-light) 0%, #fff5f6 100%);
+}
+
+.contacto-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.contacto-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.contacto-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.contacto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.contacto-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.contacto-icon i {
+  font-size: 1.8rem !important;
+  color: white !important;
+  line-height: 1;
+}
+
+/* Estilos específicos para iconos de contacto */
+.contacto-icon .fab,
+.contacto-icon .fas {
+  font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands' !important;
+  font-style: normal;
+  font-weight: 900;
+  display: block;
+}
+
+.contacto-icon .fab.fa-whatsapp {
+  font-weight: 400;
+}
+
+/* Fallback: Iconos simples como respaldo */
+.contacto-icon i:not(.fab):not(.fas):before {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1.8rem;
+}
+
+.contacto-icon.whatsapp i:not(.fab):before {
+  content: "💬";
+}
+
+.contacto-icon.email i:not(.fas):before {
+  content: "✉️";
+}
+
+.contacto-icon.telefono i:not(.fas):before {
+  content: "📞";
+}
+
+.contacto-icon.whatsapp {
+  background: linear-gradient(135deg, #25d366, #128c7e);
+}
+
+.contacto-icon.email {
+  background: linear-gradient(135deg, #fe395e, #ff6b7a);
+}
+
+.contacto-icon.telefono {
+  background: linear-gradient(135deg, #ff6b7a, #ff8a95);
+}
+
+.contacto-info h3 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 0.5rem 0;
+}
+
+.contacto-info p {
+  color: var(--text-gray);
+  margin: 0 0 0.5rem 0;
+  font-weight: 500;
+}
+
+.contacto-action {
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.contacto-footer {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 15px;
+  border: 1px solid var(--border-color);
+}
+
+.horarios {
+  color: var(--text-gray);
+  margin: 0 0 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.horarios i {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+/* ===== BOTÓN FLOTANTE WHATSAPP ===== */
+.whatsapp-float {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+.whatsapp-float-btn {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+.whatsapp-float-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 35px rgba(37, 211, 102, 0.6);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6), 0 0 0 10px rgba(37, 211, 102, 0.1);
+  }
+  100% {
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 2rem;
+  }
+
+  .hero-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .section-container {
+    padding: 3rem 1rem;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+  }
+
+  .beneficios-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .beneficio-card {
+    padding: 1.5rem;
+  }
+
+  .proceso-steps {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .step-item {
+    padding: 1.5rem;
+  }
+
+  .requisitos-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contacto-methods {
+    grid-template-columns: 1fr;
+  }
+
+  .contacto-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .cta-title {
+    font-size: 2.2rem;
+  }
+
+  .cta-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .cta-button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    padding: 4rem 1rem;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .section-container {
+    padding: 2rem 1rem;
+  }
+
+  .beneficio-card {
+    padding: 1.5rem;
+  }
+
+  .contacto-card {
+    padding: 1.5rem;
+  }
+}

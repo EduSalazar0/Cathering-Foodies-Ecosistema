@@ -1,0 +1,26 @@
+<div>
+  <!-- Header arriba -->
+  <div class="main-header w-full">
+    <app-header (menuClick)="handleSidebarToggle()"></app-header>
+  </div>
+  <!-- Layout principal con sidebar y main content -->
+  <div class="main-layout-content">
+    <!-- Sidebar -->
+    <div class="main-sidebar" [class.show]="sidebarVisible">
+      <app-sidebar 
+        [isOpen]="sidebarVisible"
+        [menuItems]="filteredMenuItems"
+        [userInfo]="userInfo"
+        (itemClick)="onSidebarItemClick($event)"
+        (logout)="onLogout()">
+      </app-sidebar>
+    </div>
+    <!-- Main Content -->
+    <main class="main-content-custom" 
+          [class.sidebar-hidden]="!sidebarVisible">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  <!-- Toast global para mensajes -->
+  <p-toast position="top-right"></p-toast>
+</div>

@@ -1,0 +1,15 @@
+<div>
+  <ng-container [formGroup]="group!">
+    <p-floatlabel>
+      <input
+        pInputText
+        [id]="formControlName"
+        [type]="type"
+        [formControlName]="formControlName"
+        class="w-full"
+      />
+      <label [for]="formControlName">{{ label }}</label>
+    </p-floatlabel>
+  </ng-container>
+  <app-field-errors [customErrorMessage]="customErrorMessage" [errors]="control?.errors"></app-field-errors>
+</div>

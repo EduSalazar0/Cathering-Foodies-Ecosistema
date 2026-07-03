@@ -1,0 +1,254 @@
+{
+  "realm": "proyecto-seguro",
+  "enabled": true,
+  "displayName": "Proyecto Seguro Foodies + Cathering",
+  "registrationAllowed": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "sslRequired": "external",
+  "otpPolicyType": "totp",
+  "otpPolicyAlgorithm": "HmacSHA1",
+  "otpPolicyDigits": 6,
+  "otpPolicyPeriod": 30,
+  "otpPolicyLookAheadWindow": 1,
+  "requiredActions": [
+    {
+      "alias": "CONFIGURE_TOTP",
+      "name": "Configure OTP",
+      "providerId": "CONFIGURE_TOTP",
+      "enabled": true,
+      "defaultAction": true,
+      "priority": 10
+    }
+  ],
+  "roles": {
+    "realm": [
+      { "name": "admin", "description": "Administrador de seguridad e identidades" },
+      { "name": "foodie", "description": "Usuario Foodies" },
+      { "name": "restaurante", "description": "Rol operativo de restaurante Foodies" },
+      { "name": "estudiante", "description": "Usuario estudiante de Cathering" },
+      { "name": "cafeteria", "description": "Operador de cafeteria Cathering" },
+      { "name": "personal_academico", "description": "Personal academico Cathering" }
+    ],
+    "client": {
+      "foodies-angular": [
+        { "name": "foodies_admin", "description": "Administrador del Sistema B Foodies" },
+        { "name": "foodies_foodie", "description": "Usuario consumidor del Sistema B Foodies" },
+        { "name": "foodies_restaurante", "description": "Operador restaurante del Sistema B Foodies" }
+      ],
+      "foodies-backend": [
+        { "name": "foodies_admin", "description": "Administrador del Sistema B Foodies" },
+        { "name": "foodies_foodie", "description": "Usuario consumidor del Sistema B Foodies" },
+        { "name": "foodies_restaurante", "description": "Operador restaurante del Sistema B Foodies" }
+      ],
+      "cathering-react": [
+        { "name": "cathering_admin", "description": "Administrador del Sistema A Cathering" },
+        { "name": "cathering_estudiante", "description": "Estudiante del Sistema A Cathering" },
+        { "name": "cathering_cafeteria", "description": "Operador cafeteria del Sistema A Cathering" },
+        { "name": "cathering_personal_academico", "description": "Personal academico del Sistema A Cathering" }
+      ],
+      "cathering-backend": [
+        { "name": "cathering_admin", "description": "Administrador del Sistema A Cathering" },
+        { "name": "cathering_estudiante", "description": "Estudiante del Sistema A Cathering" },
+        { "name": "cathering_cafeteria", "description": "Operador cafeteria del Sistema A Cathering" },
+        { "name": "cathering_personal_academico", "description": "Personal academico del Sistema A Cathering" }
+      ]
+    }
+  },
+  "clients": [
+    {
+      "clientId": "cathering-react",
+      "name": "Sistema A - Cathering React",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "implicitFlowEnabled": false,
+      "redirectUris": [
+        "http://localhost:5173/*",
+        "http://127.0.0.1:5173/*",
+        "http://localhost:5174/*",
+        "http://127.0.0.1:5174/*"
+      ],
+      "webOrigins": [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      },
+      "protocol": "openid-connect"
+    },
+    {
+      "clientId": "foodies-angular",
+      "name": "Sistema B - Foodies Angular",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "implicitFlowEnabled": false,
+      "redirectUris": [
+        "http://localhost:4200/*",
+        "http://127.0.0.1:4200/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4200",
+        "http://127.0.0.1:4200"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      },
+      "protocol": "openid-connect"
+    },
+    {
+      "clientId": "cathering-backend",
+      "name": "Sistema A - APIs Node",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": true,
+      "protocol": "openid-connect"
+    },
+    {
+      "clientId": "foodies-backend",
+      "name": "Sistema B - APIs .NET",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": true,
+      "protocol": "openid-connect"
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "email": "admin@seguro.local",
+      "firstName": "Admin",
+      "lastName": "Seguro",
+      "enabled": true,
+      "emailVerified": true,
+      "requiredActions": ["CONFIGURE_TOTP"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Admin123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["admin", "foodie", "restaurante", "cafeteria", "personal_academico"],
+      "clientRoles": {
+        "foodies-angular": ["foodies_admin", "foodies_foodie", "foodies_restaurante"],
+        "foodies-backend": ["foodies_admin", "foodies_foodie", "foodies_restaurante"],
+        "cathering-react": ["cathering_admin", "cathering_cafeteria", "cathering_personal_academico"],
+        "cathering-backend": ["cathering_admin", "cathering_cafeteria", "cathering_personal_academico"]
+      }
+    },
+    {
+      "username": "foodie",
+      "email": "foodie@seguro.local",
+      "firstName": "Foodie",
+      "lastName": "Demo",
+      "enabled": true,
+      "emailVerified": true,
+      "requiredActions": ["CONFIGURE_TOTP"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Foodie123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["foodie"],
+      "clientRoles": {
+        "foodies-angular": ["foodies_foodie"],
+        "foodies-backend": ["foodies_foodie"]
+      }
+    },
+    {
+      "username": "estudiante",
+      "email": "estudiante@seguro.local",
+      "firstName": "Estudiante",
+      "lastName": "Demo",
+      "enabled": true,
+      "emailVerified": true,
+      "requiredActions": ["CONFIGURE_TOTP"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Estudiante123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["estudiante"],
+      "clientRoles": {
+        "cathering-react": ["cathering_estudiante"],
+        "cathering-backend": ["cathering_estudiante"]
+      }
+    },
+    {
+      "username": "restaurante",
+      "email": "restaurante@seguro.local",
+      "firstName": "Restaurante",
+      "lastName": "Demo",
+      "enabled": true,
+      "emailVerified": true,
+      "requiredActions": ["CONFIGURE_TOTP"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Restaurante123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["restaurante"],
+      "clientRoles": {
+        "foodies-angular": ["foodies_restaurante"],
+        "foodies-backend": ["foodies_restaurante"]
+      }
+    },
+    {
+      "username": "cafeteria",
+      "email": "cafeteria@seguro.local",
+      "firstName": "Cafeteria",
+      "lastName": "Demo",
+      "enabled": true,
+      "emailVerified": true,
+      "requiredActions": ["CONFIGURE_TOTP"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Cafeteria123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["cafeteria"],
+      "clientRoles": {
+        "cathering-react": ["cathering_cafeteria"],
+        "cathering-backend": ["cathering_cafeteria"]
+      }
+    },
+    {
+      "username": "personal",
+      "email": "personal@seguro.local",
+      "firstName": "Personal",
+      "lastName": "Academico",
+      "enabled": true,
+      "emailVerified": true,
+      "requiredActions": ["CONFIGURE_TOTP"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Personal123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["personal_academico"],
+      "clientRoles": {
+        "cathering-react": ["cathering_personal_academico"],
+        "cathering-backend": ["cathering_personal_academico"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+<div class="login-container">
+  <div class="login-left">
+    <div class="login-form-container">
+      <div class="logo">
+        <img src="/img/Logo Transparente.png" alt="FoodiesBNB Logo" class="logo-image">
+      </div>
+
+      <div class="form-section">
+        <p class="eyebrow">Acceso unificado</p>
+        <h2>Iniciar sesion</h2>
+        <p class="subtitle">
+          Foodies usa el mismo inicio de sesion centralizado que Cathering.
+          Ingresa con tu usuario de Keycloak y valida el OTP desde tu app movil.
+        </p>
+
+        <button type="button" class="login-btn" (click)="loginWithKeycloak()" [disabled]="isLoading">
+          <span *ngIf="isLoading">Redirigiendo a Keycloak...</span>
+          <span *ngIf="!isLoading">Iniciar sesion con Keycloak</span>
+        </button>
+
+        <div class="identity-note">
+          <strong>SSO activo:</strong>
+          si ya iniciaste sesion en Cathering, Foodies reutilizara la misma sesion.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <img src="/img/Login.webp" alt="Food collage" class="background-image">
+  </div>
+</div>
+
+<p-toast position="top-right"></p-toast>

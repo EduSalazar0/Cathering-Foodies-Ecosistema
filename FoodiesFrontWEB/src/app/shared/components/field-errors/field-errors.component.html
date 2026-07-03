@@ -1,0 +1,3 @@
+@for (error of entryErrors; track error[0]) {
+  <p-message severity="error" variant="simple" size="small">{{getErrorMessage(error[0], error[1])}}</p-message>
+}

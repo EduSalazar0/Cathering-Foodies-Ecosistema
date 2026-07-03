@@ -1,0 +1,105 @@
+/* Variables CSS */
+:host {
+  --header-height: 70px;
+  --sidebar-width: 240px;
+}
+
+/* Main content area - properly positioned */
+.main-content-custom {
+  flex: 1;
+  margin: 0.75rem;
+  margin-left: calc(var(--sidebar-width) + 0.75rem);
+  background: rgba(255,255,255,0.8);
+  border-radius: 1rem;
+  box-shadow: 0 10px 32px 0 rgba(60, 60, 180, 0.18);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  overflow: auto;
+  transition: margin-left 0.3s ease;
+  min-height: calc(100vh - var(--header-height) - 1.5rem);
+}
+
+/* Cuando el sidebar está oculto */
+.main-content-custom.sidebar-hidden {
+  margin-left: 0.75rem;
+}
+
+/* Header siempre arriba - ocupa toda la pantalla */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  height: var(--header-height);
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Layout principal debajo del header */
+.main-layout-content {
+  margin-top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+/* Sidebar container - properly positioned */
+.main-sidebar {
+  width: var(--sidebar-width);
+  position: fixed;
+  left: 0;
+  top: var(--header-height);
+  z-index: 900;
+  height: calc(100vh - var(--header-height));
+  transition: transform 0.3s ease;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transform: translateX(0);
+}
+
+/* Hidden sidebar */
+.main-sidebar:not(.show) {
+  transform: translateX(-100%);
+}
+
+/* Desktop behavior */
+@media (min-width: 1024px) {
+  .main-sidebar {
+    transform: translateX(0);
+    position: fixed;
+  }
+  
+  .main-content-custom {
+    margin-left: calc(var(--sidebar-width) + 0.75rem);
+  }
+  
+  .main-content-custom.sidebar-hidden {
+    margin-left: 0.75rem;
+  }
+}
+
+/* Mobile and tablet behavior */
+@media (max-width: 1023px) {
+  .main-sidebar {
+    position: fixed;
+    width: 280px;
+    z-index: 1050;
+    background: transparent;
+    box-shadow: none;
+    top: 0;
+    left: 0;
+    height: 100vh;
+  }
+  
+  .main-content-custom {
+    margin: 0.5rem;
+    margin-left: 0.5rem;
+    margin-top: calc(var(--header-height) + 0.5rem);
+  }
+  
+  .main-content-custom.sidebar-hidden {
+    margin-left: 0.5rem;
+  }
+}

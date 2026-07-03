@@ -1,0 +1,39 @@
+@AdminCoreApi_HostAddress = http://localhost:5005
+
+### Test - Get All Users
+GET {{AdminCoreApi_HostAddress}}/api/Users
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Test - Get Resumen General
+GET {{AdminCoreApi_HostAddress}}/api/Analytics/resumen-general
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Test - Get Restaurantes Analytics
+GET {{AdminCoreApi_HostAddress}}/api/Analytics/restaurantes
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Test - Get Tendencias
+GET {{AdminCoreApi_HostAddress}}/api/Analytics/tendencias
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Test - Get All Roles
+GET {{AdminCoreApi_HostAddress}}/api/Roles
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Test - Create Rol
+POST {{AdminCoreApi_HostAddress}}/api/Roles
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "nombre": "nuevo_rol",
+  "descripcion": "Descripción del nuevo rol"
+}
+
+### Test - Delete User
+DELETE {{AdminCoreApi_HostAddress}}/api/Users/1
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Test - Delete Reserva
+DELETE {{AdminCoreApi_HostAddress}}/api/Reservas/1
+Authorization: Bearer YOUR_TOKEN_HERE

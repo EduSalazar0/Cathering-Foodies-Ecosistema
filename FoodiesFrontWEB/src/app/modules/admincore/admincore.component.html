@@ -1,0 +1,30 @@
+<div class="admincore-container">
+  <div class="header-section">
+    <h1 class="page-title">
+      <i class="pi pi-cog"></i>
+      Administración del Core
+    </h1>
+    <p class="page-subtitle">
+      Panel de control administrativo de FoodiesBNB - Gestiona todo tu ecosistema
+    </p>
+  </div>
+
+  <div class="sections-grid">
+    <div *ngFor="let section of adminSections" 
+         class="section-card" 
+         (click)="navigateTo(section.route)"
+         [style.border-left-color]="section.color">
+      <div class="card-header">
+        <div class="icon-wrapper" [style.background-color]="section.color + '20'">
+          <i [class]="'pi ' + section.icon" [style.color]="section.color"></i>
+        </div>
+        <h3 class="card-title">{{ section.title }}</h3>
+      </div>
+      <p class="card-description">{{ section.description }}</p>
+      <div class="card-footer">
+        <span class="action-text">Acceder</span>
+        <i class="pi pi-arrow-right"></i>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<div>
+  <ng-container [formGroup]="group!">
+    <p-floatlabel [ngSwitch]="type">
+      <ng-container *ngSwitchCase="'decimal'"> <ng-container *ngTemplateOutlet="decimal; context: {form:group}"/> </ng-container>
+      <ng-container *ngSwitchCase="'integer'"> <ng-container  *ngTemplateOutlet="integer; context: {form:group}"/> </ng-container>
+      <ng-container *ngSwitchCase="'currency'"> <ng-container  *ngTemplateOutlet="currency; context: {form:group}"/></ng-container>
+      <ng-container *ngSwitchCase="'percentage'"> <ng-container  *ngTemplateOutlet="percentage; context: {form:group}"/></ng-container>
+      <label [for]="formControlName">{{ label }}</label>
+    </p-floatlabel>
+  </ng-container>
+  <app-field-errors [customErrorMessage]="customErrorMessage" [errors]="control?.errors"></app-field-errors>
+</div>
+
+<ng-template #decimal let-form = "form">
+  <ng-container [formGroup]="form">
+    <p-inputnumber
+      [inputId]="formControlName"
+      [formControlName]="formControlName"
+      [invalid]="isInvalid('value')"
+      mode="decimal"
+      locale="en-US"
+      [minFractionDigits]="minFractionDigits"
+      [maxFractionDigits]="maxFractionDigits"
+      class="w-full"
+      />
+  </ng-container>
+</ng-template>
+<ng-template #integer let-form = "form">
+  <ng-container [formGroup]="form">
+    <p-inputnumber
+      [inputId]="formControlName"
+      [formControlName]="formControlName"
+      [invalid]="isInvalid('value')"
+      class="w-full"
+      />
+  </ng-container>
+</ng-template>
+<ng-template #currency let-form = "form">
+  <ng-container [formGroup]="form">
+    <p-inputnumber
+      [inputId]="formControlName"
+      [formControlName]="formControlName"
+      [invalid]="isInvalid('value')"
+      mode="currency"
+      currency="USD"
+      locale="en-US"
+      class="w-full"
+      />
+  </ng-container>
+</ng-template>
+<ng-template #percentage let-form = "form">
+  <ng-container [formGroup]="form">
+    <p-inputnumber
+      [inputId]="formControlName"
+      [formControlName]="formControlName"
+      [invalid]="isInvalid('value')"
+      prefix="%"
+      class="w-full"
+      />
+  </ng-container>
+</ng-template>

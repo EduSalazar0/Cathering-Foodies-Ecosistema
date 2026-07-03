@@ -1,0 +1,12 @@
+<div class="field">
+  <label *ngIf="label" class="font-semibold block mb-2">{{ label }}</label>
+  
+  <p-editor 
+    [ngModel]="value" 
+    (onTextChange)="onEditorTextChange($event)" 
+    (onBlur)="onTouch()"
+    [style]="style" 
+    [disabled]="isDisabled">
+  </p-editor>
+
+  </div>

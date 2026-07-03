@@ -1,0 +1,99 @@
+<div class="register-container">
+  <div class="register-left">
+    <div class="register-form-container">
+      <div class="logo">
+        <img src="/img/Logo Transparente.png" alt="FoodiesBNB Logo" class="logo-image">
+      </div>
+      
+      <div class="form-section">
+        <h2>Crear Cuenta</h2>
+        <p class="subtitle">Únete a nuestra comunidad de foodies</p>
+        
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input 
+                type="text" 
+                id="nombre" 
+                formControlName="nombre"
+                placeholder="Tu nombre"
+                [class.error]="form.get('nombre')?.invalid && form.get('nombre')?.touched">
+              <div class="error-message" *ngIf="getFieldError('nombre')">
+                {{ getFieldError('nombre') }}
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="apellido">Apellido</label>
+              <input 
+                type="text" 
+                id="apellido" 
+                formControlName="apellido"
+                placeholder="Tu apellido"
+                [class.error]="form.get('apellido')?.invalid && form.get('apellido')?.touched">
+              <div class="error-message" *ngIf="getFieldError('apellido')">
+                {{ getFieldError('apellido') }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="correo">Correo electrónico</label>
+            <input 
+              type="email" 
+              id="correo" 
+              formControlName="correo"
+              placeholder="tu@email.com"
+              [class.error]="form.get('correo')?.invalid && form.get('correo')?.touched">
+            <div class="error-message" *ngIf="getFieldError('correo')">
+              {{ getFieldError('correo') }}
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input 
+              type="password" 
+              id="password" 
+              formControlName="password"
+              placeholder="••••••••"
+              [class.error]="form.get('password')?.invalid && form.get('password')?.touched">
+            <div class="error-message" *ngIf="getFieldError('password')">
+              {{ getFieldError('password') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar contraseña</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              formControlName="confirmPassword"
+              placeholder="••••••••"
+              [class.error]="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched">
+            <div class="error-message" *ngIf="getFieldError('confirmPassword')">
+              {{ getFieldError('confirmPassword') }}
+            </div>
+          </div>
+          
+          <button type="submit" class="register-btn" [disabled]="!form.valid || isLoading">
+            <span *ngIf="isLoading">Creando cuenta...</span>
+            <span *ngIf="!isLoading">Crear Cuenta</span>
+          </button>
+        </form>
+        
+        <div class="login-link">
+          <p>¿Ya tienes una cuenta? <a (click)="onLogin()">Iniciar Sesión</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="register-right">
+    <img src="/img/Login.webp" alt="Food collage" class="background-image">
+  </div>
+</div>
+
+<p-toast position="top-right"></p-toast>

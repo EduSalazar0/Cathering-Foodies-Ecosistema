@@ -1,0 +1,434 @@
+<!-- Contenido Principal del Dashboard -->
+<main class="dashboard-content">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Dashboard Foodie</h1>
+      <p class="hero-subtitle">Gestiona tus reservas, visitas y entregables como un verdadero Foodie</p>
+    </div>
+  </section>
+
+  <!-- Tabs Navigation -->
+  <section class="tabs-section">
+    <div class="tabs-container">
+      <button 
+        class="tab-button"
+        [class.active]="activeTab === 'restaurantes'"
+        (click)="setActiveTab('restaurantes')">
+        <i class="pi pi-home"></i>
+        Restaurantes
+      </button>
+      <button 
+        class="tab-button"
+        [class.active]="activeTab === 'visitas'"
+        (click)="setActiveTab('visitas')">
+        <i class="pi pi-calendar"></i>
+        Mis Visitas
+      </button>
+      <button 
+        class="tab-button"
+        [class.active]="activeTab === 'entregables'"
+        (click)="setActiveTab('entregables')">
+        <i class="pi pi-upload"></i>
+        Entregables
+      </button>
+    </div>
+  </section>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    
+    <!-- Restaurantes Tab -->
+    <div *ngIf="activeTab === 'restaurantes'" class="restaurants-tab">
+      <!-- Search & Filters Section -->
+      <section class="search-section">
+        <div class="search-container">
+          <div class="search-bar-inline">
+            <div class="search-input-group">
+              <i class="pi pi-search"></i>
+              <input 
+                type="text" 
+                placeholder="Buscar restaurantes por nombre..."
+                class="search-input"
+                [(ngModel)]="searchTerm"
+                (input)="onSearchInput($event)">
+            </div>
+            
+            <div class="filters-inline">
+              <div class="filter-group-small">
+                <i class="pi pi-map-marker"></i>
+                <select class="filter-select-small" [(ngModel)]="selectedUbicacion" (change)="onUbicacionChange($event)">
+                  <option value="">Ubicación</option>
+                  <option value="quito">Quito</option>
+                  <option value="guayaquil">Guayaquil</option>
+                  <option value="cuenca">Cuenca</option>
+                  <option value="cumbaya">Cumbayá</option>
+                </select>
+              </div>
+              
+              <div class="filter-group-small">
+                <i class="pi pi-tags"></i>
+                <select class="filter-select-small" [(ngModel)]="selectedTipoCocina" (change)="onTipoCocinaChange($event)">
+                  <option value="">Tipo de cocina</option>
+                  <option value="brunch">Brunch</option>
+                  <option value="pizza">Pizza</option>
+                  <option value="pasta">Pasta</option>
+                  <option value="grill">Grill</option>
+                  <option value="sushi">Sushi</option>
+                </select>
+              </div>
+              
+              <button class="search-btn-small" type="button" (click)="onSearch()">
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Restaurants Grid -->
+      <section class="restaurants-section">
+        <div class="section-header">
+          <h2 class="section-title">Restaurantes Destacados</h2>
+          <p class="section-subtitle">Descubre los mejores lugares para comer</p>
+        </div>
+        
+        <div class="restaurants-grid">
+          <article 
+            *ngFor="let restaurante of restaurantesFiltrados" 
+            class="restaurant-card">
+            
+            <div class="card-image-container">
+              <img [src]="restaurante.imagen" 
+                   [alt]="restaurante.nombre" 
+                   class="card-image"
+                   loading="lazy">
+              
+              <div class="card-overlay">
+                <span class="category-badge">{{ restaurante.tipo }}</span>
+              </div>
+            </div>
+            
+            <div class="card-body">
+              <h3 class="restaurant-name">{{ restaurante.nombre }}</h3>
+              <p class="restaurant-location">
+                <i class="pi pi-map-marker"></i>
+                {{ restaurante.ubicacion }}
+              </p>
+              
+              <!-- Botón Reservar exclusivo para Foodies -->
+              <div class="card-actions">
+                <button 
+                  class="btn-reservar" 
+                  type="button"
+                  (click)="onReservar(restaurante)">
+                  <i class="pi pi-calendar-plus"></i>
+                  Reservar
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <!-- Visitas Tab -->
+    <div *ngIf="activeTab === 'visitas'" class="visitas-tab">
+      <div class="tab-section">
+        <div class="section-header">
+          <h2 class="section-title">Mis Visitas</h2>
+          <p class="section-subtitle">Historial de tus visitas a restaurantes</p>
+        </div>
+        
+        <div class="table-container">
+          <table class="visitas-table">
+            <thead>
+              <tr>
+                <th>Restaurante</th>
+                <th>Fecha de Reserva</th>
+                <th>Estado</th>
+                <th>Personas</th>
+                <th>Entregables</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="misReservas.length === 0">
+                <td colspan="6" class="no-data">
+                  <i class="pi pi-info-circle"></i>
+                  No tienes reservas registradas aún
+                </td>
+              </tr>
+              <tr *ngFor="let reserva of misReservas">
+                <td>{{ reserva.nombreLocal }}</td>
+                <td>{{ reserva.fecha | date:'dd/MM/yyyy' }} - {{ reserva.hora }}</td>
+                <td>
+                  <span class="estado-badge" [class]="getEstadoClase(reserva)">
+                    {{ getEstadoTexto(reserva) }}
+                  </span>
+                </td>
+                <td>{{ reserva.numeroPersonas }}</td>
+                <td>
+                  <span *ngIf="reserva.entregables && reserva.entregables.length > 0" class="text-success">
+                    ✓ {{ reserva.entregables.length }} entregable(s)
+                  </span>
+                  <span *ngIf="!reserva.entregables || reserva.entregables.length === 0" class="text-muted">
+                    Sin entregables
+                  </span>
+                </td>
+                <td class="acciones-cell">
+                  <!-- Botón Cancelar - Solo visible si se puede cancelar -->
+                  <button 
+                    *ngIf="puedeCancelar(reserva)" 
+                    class="btn-cancelar"
+                    (click)="cancelarReserva(reserva)"
+                    title="Cancelar reserva">
+                    <i class="pi pi-times"></i>
+                    Cancelar
+                  </button>
+                  
+                  <!-- Mensaje de período para entregables -->
+                  <span *ngIf="enPeriodoEntrega(reserva)" class="periodo-entrega">
+                    <i class="pi pi-clock"></i>
+                    Período de entrega activo
+                  </span>
+                  
+                  <!-- Estado completado -->
+                  <span *ngIf="reserva.estadoReserva === 'Visita Completada'" class="text-success">
+                    <i class="pi pi-check-circle"></i>
+                    Completada
+                  </span>
+                  
+                  <!-- Estado falta grave -->
+                  <span *ngIf="reserva.estadoReserva === 'Falta Grave'" class="text-danger">
+                    <i class="pi pi-exclamation-triangle"></i>
+                    Falta Grave
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Entregables Tab -->
+    <div *ngIf="activeTab === 'entregables'" class="entregables-tab">
+      <div class="tab-section">
+        <div class="section-header">
+          <h2 class="section-title">Entregables</h2>
+          <p class="section-subtitle">Comparte tu experiencia gastronómica</p>
+        </div>
+        
+        <!-- Información sobre reservas disponibles para entregables -->
+        <div class="reservas-disponibles" *ngIf="misReservas.length > 0">
+          <h3>Selecciona la Reserva para Subir Entregables</h3>
+          <div class="reservas-grid">
+            <div *ngFor="let reserva of getReservasDisponiblesParaEntregables()" 
+                 class="reserva-card" 
+                 [class.disponible]="enPeriodoEntrega(reserva)"
+                 [class.seleccionada]="esReservaSeleccionada(reserva)"
+                 (click)="seleccionarReservaParaEntregables(reserva)">
+              <div class="reserva-info">
+                <h4>{{ reserva.nombreLocal }}</h4>
+                <p>{{ reserva.fecha | date:'dd/MM/yyyy' }} - {{ reserva.hora }}</p>
+                <span class="estado-badge-small" [class]="getEstadoClase(reserva)">
+                  {{ getEstadoTexto(reserva) }}
+                </span>
+              </div>
+              <div class="reserva-acciones">
+                <span class="tiempo-restante">
+                  <i class="pi pi-clock"></i>
+                  {{ Math.round(reserva.horasRestantesParaEntrega || 0) }}h restantes
+                </span>
+                <span *ngIf="esReservaSeleccionada(reserva)" class="seleccionada-icon">
+                  <i class="pi pi-check-circle"></i>
+                  Seleccionada
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="entregables-info" *ngIf="getReservasDisponiblesParaEntregables().length === 0">
+            <i class="pi pi-info-circle"></i>
+            <p>No tienes reservas disponibles para subir entregables en este momento.</p>
+            <p><strong>Recuerda:</strong> Puedes subir entregables solo después de la fecha de tu visita y tienes 48 horas para hacerlo.</p>
+          </div>
+
+          <!-- Indicador de reserva seleccionada -->
+          <div class="reserva-seleccionada-info" *ngIf="reservaSeleccionadaParaEntregables">
+            <div class="alert alert-info">
+              <i class="pi pi-info-circle"></i>
+              <strong>Reserva seleccionada:</strong> {{ reservaSeleccionadaParaEntregables.nombreLocal }}
+              <br>
+              <small>Fecha: {{ reservaSeleccionadaParaEntregables.fecha | date:'dd/MM/yyyy' }} - {{ reservaSeleccionadaParaEntregables.hora }}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="entregables-form-container" *ngIf="getReservasDisponiblesParaEntregables().length > 0">
+          <form class="entregables-form" (ngSubmit)="submitEntregables()">
+            <h3>Subir Evidencia de tu Visita</h3>
+            <p class="form-description">
+              Comparte tu experiencia en redes sociales y ayúdanos a promover la gastronomía local.
+            </p>
+            
+            <!-- Alerta si no hay reserva seleccionada -->
+            <div class="alert alert-warning" *ngIf="!reservaSeleccionadaParaEntregables">
+              <i class="pi pi-exclamation-triangle"></i>
+              Por favor, selecciona una reserva de la lista superior antes de subir los entregables.
+            </div>
+            <div class="form-group">
+              <label for="enlaceTikTok">
+                <i class="pi pi-video"></i>
+                Enlace de TikTok generado
+                <span class="campo-requerido">(Al menos un enlace es obligatorio)</span>
+              </label>
+              <input 
+                type="url" 
+                id="enlaceTikTok"
+                [(ngModel)]="entregables.enlaceTikTok"
+                name="enlaceTikTok"
+                placeholder="https://www.tiktok.com/@usuario/video/..."
+                class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label for="enlaceInstagram">
+                <i class="pi pi-instagram"></i>
+                Enlace de publicación de Instagram
+                <span class="campo-requerido">(Al menos un enlace es obligatorio)</span>
+              </label>
+              <input 
+                type="url" 
+                id="enlaceInstagram"
+                [(ngModel)]="entregables.enlaceInstagram"
+                name="enlaceInstagram"
+                placeholder="https://www.instagram.com/p/..."
+                class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label for="cantidadGastada">
+                <i class="pi pi-dollar"></i>
+                Cantidad gastada en la visita (USD)
+                <span class="campo-obligatorio">*Obligatorio</span>
+              </label>
+              <input 
+                type="number" 
+                id="cantidadGastada"
+                [(ngModel)]="entregables.cantidadGastada"
+                name="cantidadGastada"
+                placeholder="0.00"
+                step="0.01"
+                min="0"
+                class="form-input">
+            </div>
+
+            <!-- Mensaje de validación -->
+            <div class="validation-message" *ngIf="reservaSeleccionadaParaEntregables && !validarEntregables()">
+              <i class="pi pi-exclamation-circle"></i>
+              <strong>{{ getMensajeValidacion() }}</strong>
+              <div class="validation-rules">
+                <p><strong>Requerimientos:</strong></p>
+                <ul>
+                  <li><span class="required">*</span> Cantidad gastada (obligatorio - mayor a $0.00)</li>
+                  <li><span class="required">*</span> Al menos un enlace (TikTok O Instagram)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" (click)="resetEntregables()">
+                <i class="pi pi-refresh"></i>
+                Limpiar
+              </button>
+              <button 
+                type="submit" 
+                class="btn-primary"
+                [disabled]="!formularioEntregablesValido()"
+                [class.disabled]="!formularioEntregablesValido()">
+                <i class="pi pi-check"></i>
+                <span *ngIf="reservaSeleccionadaParaEntregables && formularioEntregablesValido()">
+                  Enviar Entregables para {{ reservaSeleccionadaParaEntregables.nombreLocal }}
+                </span>
+                <span *ngIf="!reservaSeleccionadaParaEntregables">
+                  Selecciona una Reserva
+                </span>
+                <span *ngIf="reservaSeleccionadaParaEntregables && !validarEntregables()">
+                  Completa al menos un campo
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal de Reserva -->
+<div *ngIf="showReservationModal" class="modal-overlay" (click)="closeReservationModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Reservar Mesa</h3>
+      <button class="modal-close" (click)="closeReservationModal()">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body" *ngIf="selectedRestaurant">
+      <div class="restaurant-info-modal">
+        <img [src]="selectedRestaurant.imagen" [alt]="selectedRestaurant.nombre">
+        <div class="restaurant-details">
+          <h4>{{ selectedRestaurant.nombre }}</h4>
+          <p>{{ selectedRestaurant.ubicacion }}</p>
+        </div>
+      </div>
+      
+      <form class="reservation-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" class="form-input" [(ngModel)]="reservationData.fecha" name="fecha">
+          </div>
+          <div class="form-group">
+            <label for="hora">Hora disponible</label>
+            <select id="hora" class="form-input" [(ngModel)]="reservationData.hora" name="hora">
+              <option value="">Seleccionar hora</option>
+              <option value="12:00">12:00 PM</option>
+              <option value="13:00">1:00 PM</option>
+              <option value="14:00">2:00 PM</option>
+              <option value="19:00">7:00 PM</option>
+              <option value="20:00">8:00 PM</option>
+              <option value="21:00">9:00 PM</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="personas">Número de personas</label>
+          <select id="personas" class="form-input" [(ngModel)]="reservationData.personas" name="personas">
+            <option value="1">1 persona</option>
+            <option value="2" selected>2 personas</option>
+            <option value="3">3 personas</option>
+            <option value="4">4 personas</option>
+            <option value="5">5 personas</option>
+            <option value="6">6 personas</option>
+          </select>
+        </div>
+      </form>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeReservationModal()">
+        <i class="pi pi-times"></i>
+        Cancelar
+      </button>
+      <button class="btn-primary" (click)="confirmReservation()">
+        <i class="pi pi-check"></i>
+        Confirmar Reserva
+      </button>
+    </div>
+  </div>
+</div>

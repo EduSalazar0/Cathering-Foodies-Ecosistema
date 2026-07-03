@@ -1,0 +1,38 @@
+<p-dialog
+  [(visible)]="visible"
+  (visibleChange)="visibleChange.emit($event)"
+  (onHide)="onHide()"
+  [header]="header"
+  [modal]="modal"
+  [style]="style"
+  [closable]="closable"
+  [draggable]="draggable"
+  [resizable]="resizable"
+  (onShow)="onShow()"
+  appendTo="body"
+>
+  <ng-content></ng-content>
+
+  <ng-template pTemplate="footer">
+    <ng-content select="[footer]"></ng-content>
+    <div class="flex justify-end gap-2 mt-4">
+      <app-button
+        label="Cancelar"
+        icon="pi pi-times"
+        type="button"
+        (buttonClick)="cancel()"
+        severity="danger"
+      >
+      </app-button>
+      <app-button
+        [label]="isSaving ? 'Guardando...' : 'Guardar'"
+        icon="pi pi-check"
+        type="button"
+        [loading]="isSaving"
+        (buttonClick)="save()"
+        severity="success"
+      >
+      </app-button>
+    </div>
+  </ng-template>
+</p-dialog>

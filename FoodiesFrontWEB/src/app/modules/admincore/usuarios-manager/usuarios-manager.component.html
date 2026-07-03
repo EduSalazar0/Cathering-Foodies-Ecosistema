@@ -1,0 +1,197 @@
+<div class="usuarios-manager-container">
+  <div class="header-section">
+    <h2 class="title">Gestión de Usuarios</h2>
+    <div class="actions">
+      <button class="btn-refresh" (click)="loadUsuarios()" [disabled]="loading">
+        <i class="pi" [class.pi-spin]="loading" [class.pi-refresh]="!loading" [class.pi-spinner]="loading"></i>
+        Actualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- Estado de carga -->
+  <div class="loading-state" *ngIf="loading">
+    <i class="pi pi-spin pi-spinner"></i>
+    <p>Cargando usuarios...</p>
+  </div>
+
+  <!-- Estado sin datos -->
+  <div class="empty-state" *ngIf="!loading && usuarios.length === 0">
+    <i class="pi pi-users"></i>
+    <h3>No hay usuarios registrados</h3>
+    <p>Aún no existen usuarios en la plataforma</p>
+  </div>
+
+  <!-- Tabla de usuarios -->
+  <div class="usuarios-content" *ngIf="!loading && usuarios.length > 0">
+    <div class="search-section">
+      <div class="search-box">
+        <i class="pi pi-search"></i>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm"
+          placeholder="Buscar por nombre, correo, roles..."
+          class="search-input" />
+      </div>
+      <div class="stats">
+        <span class="stat-badge">Total: {{ usuarios.length }}</span>
+        <span class="stat-badge success">Activos: {{ usuariosActivos }}</span>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="usuarios-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Roles</th>
+            <th>Fecha Registro</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of filteredUsuarios">
+            <td>{{ usuario.id }}</td>
+            <td>
+              <div class="user-info">
+                <div class="user-avatar">{{ getInitials(usuario.nombre, usuario.apellido) }}</div>
+                <div class="user-details">
+                  <strong>{{ usuario.nombre }} {{ usuario.apellido }}</strong>
+                </div>
+              </div>
+            </td>
+            <td>{{ usuario.correo }}</td>
+            <td>
+              <div class="roles-badges">
+                <span *ngFor="let rol of usuario.roles" 
+                      class="role-badge"
+                      [class.admin]="rol.nombre === 'admin'"
+                      [class.foodie]="rol.nombre === 'foodie'"
+                      [class.restaurante]="rol.nombre === 'restaurante'">
+                  {{ rol.nombre }}
+                </span>
+                <span *ngIf="!usuario.roles || usuario.roles.length === 0" class="role-badge inactive">
+                  Sin roles
+                </span>
+              </div>
+            </td>
+            <td>{{ formatDate(usuario.fechaCreacion) }}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-action edit" (click)="showRoleDialog(usuario)" title="Gestionar roles">
+                  <i class="pi pi-shield"></i>
+                </button>
+                <button class="btn-action view" (click)="viewUserDetails(usuario)" title="Ver detalles">
+                  <i class="pi pi-eye"></i>
+                </button>
+                <button class="btn-action delete" (click)="confirmDelete(usuario)" title="Eliminar usuario">
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Dialog gestión de roles -->
+  <p-dialog 
+    [(visible)]="displayRoleDialog" 
+    [header]="'Gestionar Roles - ' + (selectedUsuario?.nombre || '')" 
+    [modal]="true"
+    [style]="{width: '600px'}">
+    
+    <div class="role-management" *ngIf="selectedUsuario">
+      <div class="current-roles-section">
+        <h4>Roles Actuales</h4>
+        <div class="current-roles">
+          <div *ngFor="let rol of selectedUsuario.roles" class="role-item">
+            <span class="role-name">{{ rol.nombre }}</span>
+            <button class="btn-remove" (click)="removeRole(selectedUsuario, rol.nombre)">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+          <div *ngIf="!selectedUsuario.roles || selectedUsuario.roles.length === 0" class="no-roles">
+            <i class="pi pi-info-circle"></i>
+            <span>Este usuario no tiene roles asignados</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="assign-role-section">
+        <h4>Asignar Nuevo Rol</h4>
+        <div class="role-selector">
+          <select [(ngModel)]="selectedRol" class="role-select">
+            <option [value]="null">Selecciona un rol...</option>
+            <option *ngFor="let rol of availableRoles" [value]="rol.nombre">
+              {{ rol.nombre }} - {{ rol.descripcion || 'Sin descripción' }}
+            </option>
+          </select>
+          <button 
+            class="btn-assign" 
+            (click)="assignRole()"
+            [disabled]="!selectedRol">
+            <i class="pi pi-plus"></i>
+            Asignar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button class="btn-secondary" (click)="displayRoleDialog = false">
+        <i class="pi pi-times"></i> Cerrar
+      </button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Dialog detalles usuario -->
+  <p-dialog 
+    [(visible)]="displayDetailsDialog" 
+    [header]="'Detalles del Usuario'" 
+    [modal]="true"
+    [style]="{width: '500px'}">
+    
+    <div class="user-details-content" *ngIf="selectedUsuario">
+      <div class="detail-row">
+        <strong>ID:</strong>
+        <span>{{ selectedUsuario.id }}</span>
+      </div>
+      <div class="detail-row">
+        <strong>Nombre Completo:</strong>
+        <span>{{ selectedUsuario.nombre }} {{ selectedUsuario.apellido }}</span>
+      </div>
+      <div class="detail-row">
+        <strong>Correo:</strong>
+        <span>{{ selectedUsuario.correo }}</span>
+      </div>
+      <div class="detail-row">
+        <strong>Fecha de Registro:</strong>
+        <span>{{ formatDate(selectedUsuario.fechaCreacion) }}</span>
+      </div>
+      <div class="detail-row">
+        <strong>Roles:</strong>
+        <div class="roles-list">
+          <span *ngFor="let rol of selectedUsuario.roles" class="role-badge">
+            {{ rol.nombre }}
+          </span>
+          <span *ngIf="!selectedUsuario.roles || selectedUsuario.roles.length === 0" class="role-badge inactive">
+            Sin roles
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button class="btn-secondary" (click)="displayDetailsDialog = false">
+        Cerrar
+      </button>
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>
+</div>

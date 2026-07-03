@@ -1,0 +1,175 @@
+<div class="roles-manager-container">
+  <div class="header-section">
+    <h2 class="title">Gestión de Roles</h2>
+    <div class="actions">
+      <button class="btn-refresh" (click)="loadRoles()" [disabled]="loading">
+        <i class="pi" [class.pi-spin]="loading" [class.pi-refresh]="!loading" [class.pi-spinner]="loading"></i>
+        Actualizar
+      </button>
+      <button class="btn-create" (click)="showCreateDialog()">
+        <i class="pi pi-plus"></i>
+        Crear Rol
+      </button>
+    </div>
+  </div>
+
+  <!-- Estado de carga -->
+  <div class="loading-state" *ngIf="loading">
+    <i class="pi pi-spin pi-spinner"></i>
+    <p>Cargando roles...</p>
+  </div>
+
+  <!-- Estado sin datos -->
+  <div class="empty-state" *ngIf="!loading && roles.length === 0">
+    <i class="pi pi-shield"></i>
+    <h3>No hay roles registrados</h3>
+    <p>Crea el primer rol para comenzar</p>
+  </div>
+
+  <!-- Tabla de roles -->
+  <div class="roles-content" *ngIf="!loading && roles.length > 0">
+    <div class="search-section">
+      <div class="search-box">
+        <i class="pi pi-search"></i>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm"
+          placeholder="Buscar por nombre o descripción..."
+          class="search-input" />
+      </div>
+      <div class="stats">
+        <span class="stat-badge">Total: {{ roles.length }}</span>
+        <span class="stat-badge success">Activos: {{ rolesActivos }}</span>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="roles-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rol of filteredRoles">
+            <td>{{ rol.id }}</td>
+            <td>
+              <span class="role-badge" [class]="getRolBadgeClass(rol.nombre)">
+                {{ rol.nombre }}
+              </span>
+            </td>
+            <td>{{ rol.descripcion || 'Sin descripción' }}</td>
+            <td>
+              <span class="status-badge" [class.active]="rol.activo" [class.inactive]="!rol.activo">
+                {{ rol.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-action view" (click)="viewRolDetails(rol)" title="Ver detalles">
+                  <i class="pi pi-eye"></i>
+                </button>
+                <button 
+                  class="btn-action" 
+                  [class.toggle-on]="rol.activo" 
+                  [class.toggle-off]="!rol.activo"
+                  (click)="toggleRolStatus(rol)" 
+                  [title]="rol.activo ? 'Desactivar' : 'Activar'">
+                  <i class="pi pi-power-off"></i>
+                </button>
+                <button class="btn-action delete" (click)="confirmDeleteRol(rol)" title="Eliminar">
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Dialog crear rol -->
+  <p-dialog 
+    [(visible)]="displayCreateDialog" 
+    header="Crear Nuevo Rol" 
+    [modal]="true"
+    [style]="{width: '500px'}">
+    
+    <div class="create-rol-content">
+      <div class="form-group">
+        <label for="nombre">Nombre del Rol *</label>
+        <input 
+          id="nombre"
+          type="text" 
+          [(ngModel)]="nuevoRol.nombre"
+          class="form-input"
+          placeholder="Ej: moderador, chef, gerente"
+          required />
+        <small class="form-hint">El nombre se convertirá a minúsculas automáticamente</small>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea 
+          id="descripcion"
+          [(ngModel)]="nuevoRol.descripcion"
+          class="form-textarea"
+          rows="4"
+          placeholder="Describe las responsabilidades de este rol"></textarea>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button class="btn-secondary" (click)="displayCreateDialog = false">
+        <i class="pi pi-times"></i> Cancelar
+      </button>
+      <button class="btn-primary" (click)="createRol()" [disabled]="!nuevoRol.nombre.trim()">
+        <i class="pi pi-check"></i> Crear Rol
+      </button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Dialog detalles rol -->
+  <p-dialog 
+    [(visible)]="displayDetailsDialog" 
+    header="Detalles del Rol" 
+    [modal]="true"
+    [style]="{width: '500px'}">
+    
+    <div class="rol-details-content" *ngIf="selectedRol">
+      <div class="detail-row">
+        <strong>ID:</strong>
+        <span>{{ selectedRol.id }}</span>
+      </div>
+      <div class="detail-row">
+        <strong>Nombre:</strong>
+        <span class="role-badge" [class]="getRolBadgeClass(selectedRol.nombre)">
+          {{ selectedRol.nombre }}
+        </span>
+      </div>
+      <div class="detail-row">
+        <strong>Descripción:</strong>
+        <span>{{ selectedRol.descripcion || 'Sin descripción' }}</span>
+      </div>
+      <div class="detail-row">
+        <strong>Estado:</strong>
+        <span class="status-badge" [class.active]="selectedRol.activo" [class.inactive]="!selectedRol.activo">
+          {{ selectedRol.activo ? 'Activo' : 'Inactivo' }}
+        </span>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button class="btn-secondary" (click)="displayDetailsDialog = false">
+        Cerrar
+      </button>
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>
+</div>

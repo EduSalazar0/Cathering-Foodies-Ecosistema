@@ -1,0 +1,19 @@
+<div>
+  <ng-container [formGroup]="group!">
+    <div class="flex items-center gap-2">
+      <p-checkbox
+        [formControlName]="formControlName"
+        [binary]="true"
+        [inputId]="formControlName"
+      ></p-checkbox>
+      <label [for]="formControlName" class="cursor-pointer text-gray-700">
+        {{ label }}
+      </label>
+    </div>
+  </ng-container>
+
+  <app-field-errors
+    [customErrorMessage]="customErrorMessage"
+    [errors]="control?.errors"
+  ></app-field-errors>
+</div>

@@ -1,0 +1,21 @@
+<div>
+  <ng-container [formGroup]="group!">
+    <p-floatlabel>
+      <p-multiselect 
+        [inputId]="formControlName" 
+        [optionLabel]="optionLabel" 
+        [options]="options" 
+        [optionValue]="optionValue"
+        [formControlName]="formControlName" 
+        [scrollHeight]="scrollHeight"
+        [showToggleAll]="showToggleAll"
+        [filter]="filter"
+        [invalid] = "isInvalid('value')"
+        (onChange)="onChange($event)" 
+        appendTo="body"
+        class="w-full" />
+      <label [for]="formControlName">{{ label }}</label>
+    </p-floatlabel>
+  </ng-container>
+  <app-field-errors [customErrorMessage]="customErrorMessage" [errors]="control?.errors"></app-field-errors>
+</div>

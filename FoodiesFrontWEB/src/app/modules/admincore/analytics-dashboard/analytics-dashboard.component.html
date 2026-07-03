@@ -1,0 +1,185 @@
+<div class="analytics-container">
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <i class="pi pi-spin pi-spinner" style="font-size: 3rem"></i>
+    <p>Cargando datos analíticos...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="!loading && errorMessage">
+    <i class="pi pi-exclamation-triangle" style="font-size: 3rem; color: #f44336;"></i>
+    <p>{{ errorMessage }}</p>
+    <button class="btn-retry" (click)="loadData()">
+      <i class="pi pi-refresh"></i> Reintentar
+    </button>
+  </div>
+
+  <!-- No Data State -->
+  <div class="no-data-container" *ngIf="!loading && !errorMessage && !hasData">
+    <i class="pi pi-inbox" style="font-size: 3rem; color: #9e9e9e;"></i>
+    <h3>No hay datos disponibles</h3>
+    <p>Aún no existen registros en la plataforma para mostrar análisis.</p>
+  </div>
+
+  <!-- Data Content -->
+  <div *ngIf="!loading && !errorMessage && hasData && resumen">
+  <!-- Resumen General -->
+  <div class="summary-section">
+    <h2 class="section-title">Resumen General de la Plataforma</h2>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <i class="pi pi-users stat-icon"></i>
+        <div class="stat-content">
+          <h3>{{ resumen.totalUsuarios }}</h3>
+          <p>Total Usuarios</p>
+        </div>
+      </div>
+      
+      <div class="stat-card foodie">
+        <i class="pi pi-heart stat-icon"></i>
+        <div class="stat-content">
+          <h3>{{ resumen.totalFoodies }}</h3>
+          <p>Foodies</p>
+        </div>
+      </div>
+      
+      <div class="stat-card restaurant">
+        <i class="pi pi-building stat-icon"></i>
+        <div class="stat-content">
+          <h3>{{ restaurantesAnalytics.length }}</h3>
+          <p>Restaurantes</p>
+        </div>
+      </div>
+      
+      <div class="stat-card reserva">
+        <i class="pi pi-calendar stat-icon"></i>
+        <div class="stat-content">
+          <h3>{{ resumen.totalReservas }}</h3>
+          <p>Reservas</p>
+        </div>
+      </div>
+      
+      <div class="stat-card success">
+        <i class="pi pi-check stat-icon"></i>
+        <div class="stat-content">
+          <h3>{{ resumen.totalReservasCompletadas }}</h3>
+          <p>Completadas</p>
+        </div>
+      </div>
+      
+      <div class="stat-card money">
+        <i class="pi pi-dollar stat-icon"></i>
+        <div class="stat-content">
+          <h3>${{ resumen.ingresoTotalPlataforma.toFixed(2) }}</h3>
+          <p>Ingresos Totales</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Análisis de Restaurantes -->
+  <div class="chart-full">
+    <h2 class="section-title">Análisis Comparativo de Restaurantes</h2>
+    <canvas id="restaurantesChart"></canvas>
+  </div>  
+
+  <!-- Gráfico de Estado de Reservas -->
+  <div class="chart-single">
+    <h2 class="section-title">Estado de Reservas</h2>
+    <canvas id="reservasChart"></canvas>
+  </div>
+
+  <!-- Predicción de Visitas con Función de Ajuste -->
+  <div class="chart-full">
+    <h2 class="section-title">Análisis de Tendencias y Predicción de Visitas</h2>
+    <p class="chart-description">
+      <strong>Gráfico de dispersión de puntos</strong> que muestra las visitas/reservas históricas por restaurante. 
+      La línea punteada representa la <strong>función de ajuste</strong> calculada mediante regresión que mejor se acopla a los puntos. 
+      Los puntos con <strong>estrella dorada</strong> indican la predicción de visitas futuras basada en esta función.
+    </p>
+    <canvas id="tendenciasChart"></canvas>
+  </div>
+
+  <!-- Análisis de Personas por Reserva -->
+  <div class="chart-full">
+    <h2 class="section-title">Análisis de Cantidad de Personas por Reserva</h2>
+    <p class="chart-description">
+      <strong>Gráfico de puntos</strong> que muestra la cantidad de personas en cada reserva a lo largo del tiempo. 
+      La línea punteada representa la <strong>función de regresión lineal</strong> (y = mx + b) que mejor se ajusta a los datos. 
+      Las <strong>estrellas doradas</strong> indican la predicción del tamaño promedio de grupos para la próxima semana.
+    </p>
+    <canvas id="reservasPorFechaChart"></canvas>
+  </div>
+
+  <!-- Información de las funciones de ajuste -->
+  <div class="predictions-section" *ngIf="reservasPorFecha.length > 0">
+    <h2 class="section-title">Funciones de Ajuste y Análisis de Tendencias</h2>
+    <p class="section-description">Regresión lineal aplicada a tamaño de grupos por restaurante</p>
+    
+    <div class="predictions-grid">
+      <div *ngFor="let reserva of reservasPorFecha" class="prediction-card">
+        <h4>{{ reserva.nombreRestaurante }}</h4>
+        <div class="prediction-data">
+          <span class="prediction-month">Ecuación: y = {{ reserva.funcionAjuste.pendiente.toFixed(4) }}x + {{ reserva.funcionAjuste.intercepto.toFixed(2) }}</span>
+          <span class="prediction-value">R² = {{ reserva.funcionAjuste.coeficienteCorrelacion.toFixed(4) }}</span>
+          <span class="prediction-growth positive">
+            Promedio: {{ reserva.funcionAjuste.promedioPersonas.toFixed(1) }} personas
+          </span>
+          <span class="prediction-value">
+            Predicción (+7 días): ~{{ reserva.funcionAjuste.prediccionProximaSemana.toFixed(1) }} personas
+          </span>
+        </div>
+        <p class="prediction-interpretation">{{ reserva.funcionAjuste.interpretacion }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Restaurantes Destacados -->
+  <div class="highlights-section">
+    <h2 class="section-title">Restaurantes Destacados</h2>
+    
+    <div class="highlights-grid">
+      <div class="highlight-card popular">
+        <h3>Más Popular</h3>
+        <p class="highlight-name">{{ resumen.restauranteMasPopular.nombre }}</p>
+        <div class="highlight-stats">
+          <span>{{ resumen.restauranteMasPopular.totalReservas }} reservas</span>
+          <span>${{ resumen.restauranteMasPopular.ingresoTotal.toFixed(2) }}</span>
+        </div>
+      </div>
+      
+      <div class="highlight-card least">
+        <h3>Menos Visitado</h3>
+        <p class="highlight-name">{{ resumen.restauranteMenosVisitado.nombre }}</p>
+        <div class="highlight-stats">
+          <span>{{ resumen.restauranteMenosVisitado.totalReservas }} reservas</span>
+          <span>${{ resumen.restauranteMenosVisitado.ingresoTotal.toFixed(2) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Predicciones -->
+  <div class="predictions-section">
+    <h2 class="section-title">Predicciones de Crecimiento por Restaurante</h2>
+    <p class="section-description">Estimaciones basadas en análisis de regresión lineal</p>
+    
+    <div class="predictions-grid">
+      <div *ngFor="let tendencia of tendencias" class="prediction-card">
+        <h4>{{ tendencia.nombreRestaurante }}</h4>
+        <div class="prediction-data">
+          <span class="prediction-month">{{ tendencia.prediccion.nombreMesSiguiente }}</span>
+          <span class="prediction-value">~{{ tendencia.prediccion.visitasPredichas }} visitas</span>
+          <span class="prediction-growth" 
+                [class.positive]="tendencia.prediccion.porcentajeCrecimiento > 0"
+                [class.negative]="tendencia.prediccion.porcentajeCrecimiento < 0">
+            {{ tendencia.prediccion.porcentajeCrecimiento > 0 ? '+' : '' }}{{ tendencia.prediccion.porcentajeCrecimiento.toFixed(1) }}%
+          </span>
+        </div>
+        <p class="prediction-interpretation">{{ tendencia.prediccion.interpretacionTendencia }}</p>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
